@@ -6,4 +6,7 @@ import Lib
 
 main :: IO ()
 main = do
-  tweet "swallows"
+  -- fav TweetID
+  -- Ant渾身のツイート 
+  fav "1187353532933951494"
+  tweet "TweetTest"
