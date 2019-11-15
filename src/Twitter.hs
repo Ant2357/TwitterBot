@@ -1,12 +1,20 @@
 {-# LANGUAGE OverloadedStrings #-}
+{-# LANGUAGE DeriveGeneric #-}
 
-module Twitter (tweet, fav) where
+module Twitter (Tweet (..), tweet, fav, userTimeline) where
 
 import Data.Text
 import Data.Text.Encoding
+import Data.Aeson
+import GHC.Generics
 import Network.HTTP.Conduit
 import Web.Authenticate.OAuth
 import TwSettings
+
+newtype Tweet = Tweet { text :: Text } deriving (Show, Generic)
+
+instance FromJSON Tweet
+instance ToJSON Tweet
 
 tweet :: Text -> IO ()
 tweet tw = do
@@ -25,3 +33,14 @@ fav twId = do
   signedReq <- signOAuth twOAuth twCredential postReq
   httpLbs signedReq manager
   return ()
+
+userTimeline :: String -> Int -> IO (Either String [Tweet])
+userTimeline screenName count = do
+  req <- parseRequest
+    $ "https://api.twitter.com/1.1/statuses/user_timeline.json"
+    ++ "?screen_name=" ++ screenName
+    ++ "&count=" ++ (show count)
+  signedReq <- signOAuth twOAuth twCredential req
+  manager   <- newManager tlsManagerSettings
+  res <- httpLbs signedReq manager
+  return $ eitherDecode $ responseBody res
