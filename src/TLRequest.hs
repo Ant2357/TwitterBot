@@ -1,10 +1,10 @@
 {-# LANGUAGE DeriveGeneric #-}
 
-module TLConfig (TLConfig (..)) where
+module TLRequest (TLRequest (..)) where
 
 import GHC.Generics
 
-data TLConfig = TLConfig {
+data TLRequest = TLRequest {
   twScreenName     :: String,
   twCount          :: Int,
   twExcludeReplies :: Bool,

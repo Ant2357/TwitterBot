@@ -3,7 +3,7 @@
 module Main where
 
 import Twitter
-import TLConfig
+import TLRequest
 
 import qualified Data.Text.IO as T
 
@@ -12,9 +12,9 @@ main = do
   -- fav TweetID
   -- Ant渾身のツイートをいいね
   fav "1187353532933951494"
-  tweet "a"
+  tweet "チョコパイ美味しい"
 
-  timeline <- userTimeline TLConfig {
+  timeline <- userTimeline TLRequest {
     twScreenName     = "ant2357",
     twCount          = 20,   -- 取得するツイート件数
     twExcludeReplies = True, -- リプライを除外するか

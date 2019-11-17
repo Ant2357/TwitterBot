@@ -10,7 +10,7 @@ import GHC.Generics
 import Network.HTTP.Conduit
 import Web.Authenticate.OAuth
 import TwSettings
-import TLConfig
+import TLRequest
 
 newtype Tweet = Tweet { text :: Text } deriving (Show, Generic)
 
@@ -35,14 +35,14 @@ fav twId = do
   httpLbs signedReq manager
   return ()
 
-userTimeline :: TLConfig -> IO (Either String [Tweet])
-userTimeline tConfig = do
+userTimeline :: TLRequest -> IO (Either String [Tweet])
+userTimeline tRequest = do
   req       <- parseRequest
               $ "https://api.twitter.com/1.1/statuses/user_timeline.json"
-              ++ "?screen_name=" ++ twScreenName tConfig
-              ++ "&count=" ++ show (twCount tConfig)
-              ++ "&exclude_replies=" ++ show (twExcludeReplies tConfig)
-              ++ "&include_rts=" ++ show (twIncludeRts tConfig)
+              ++ "?screen_name=" ++ twScreenName tRequest
+              ++ "&count=" ++ show (twCount tRequest)
+              ++ "&exclude_replies=" ++ show (twExcludeReplies tRequest)
+              ++ "&include_rts=" ++ show (twIncludeRts tRequest)
   signedReq <- signOAuth twOAuth twCredential req
   manager   <- newManager tlsManagerSettings
   res       <- httpLbs signedReq manager
