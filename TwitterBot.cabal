@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 09f98e8e5d9158b5b089ce1371f923514155a3001ffaad2493d243f0abf46f75
+-- hash: 88dca696184bc64773c40f717fade5ed5cf3f0a2cca51c8b2a20753b1b978d5f
 
 name:           TwitterBot
 version:        0.1.0.0
@@ -27,6 +27,7 @@ source-repository head
 
 library
   exposed-modules:
+      TLConfig
       Twitter
       TwSettings
   other-modules:
