@@ -2,9 +2,8 @@
 
 module Main where
 
-import Twitter
-import TLRequest
-
+import Twitter.Statuses
+import Twitter.Favorites
 import qualified Data.Text.IO as T
 
 main :: IO ()
@@ -12,7 +11,7 @@ main = do
   -- fav TweetID
   -- Ant渾身のツイートをいいね
   fav "1187353532933951494"
-  tweet "チョコパイ美味しい"
+  tweet "もはや政府転覆しかない"
 
   timeline <- userTimeline TLRequest {
     twScreenName     = "ant2357",
