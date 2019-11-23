@@ -1,5 +1,6 @@
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE DeriveGeneric #-}
+{-# LANGUAGE DuplicateRecordFields #-}
 
 module Twitter.Statuses (Tweet (..), TLRequest (..), tweet, userTimeline) where
 
@@ -11,7 +12,11 @@ import Network.HTTP.Conduit
 import Web.Authenticate.OAuth
 import TwSettings
 
-newtype Tweet = Tweet { text :: Text } deriving (Show, Generic)
+data Tweet = Tweet {
+  id     :: Integer,
+  text   :: Text
+} deriving (Show, Generic)
+
 instance FromJSON Tweet
 instance ToJSON Tweet
 
