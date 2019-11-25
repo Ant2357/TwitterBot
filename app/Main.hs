@@ -15,7 +15,7 @@ main = do
 
   timeline <- userTimeline TLRequest {
     twScreenName     = "ant2357",
-    twCount          = 20,   -- 取得するツイート件数
+    twCount          = 20,   -- 検索件数
     twExcludeReplies = True, -- リプライを除外するか
     twIncludeRts     = True  -- リツイートを含めるか
   }
