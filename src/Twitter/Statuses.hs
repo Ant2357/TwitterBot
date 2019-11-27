@@ -27,14 +27,14 @@ data TLRequest = TLRequest {
   twIncludeRts     :: Bool
 } deriving (Show, Generic)
 
-tweet :: Text -> IO ()
+tweet :: Text -> IO (Either String Tweet)
 tweet tw = do
   req         <- parseRequest "https://api.twitter.com/1.1/statuses/update.json"
   manager     <- newManager tlsManagerSettings
   let postReq  = urlEncodedBody [("status", encodeUtf8 tw)] req
   signedReq   <- signOAuth twOAuth twCredential postReq
-  httpLbs signedReq manager
-  return ()
+  res         <- httpLbs signedReq manager
+  return $ eitherDecode $ responseBody res
 
 userTimeline :: TLRequest -> IO (Either String [Tweet])
 userTimeline tRequest = do

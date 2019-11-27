@@ -3,17 +3,18 @@ module Twitter.StatusesSpec (spec) where
 
 import Test.Hspec
 import Twitter.Statuses
+import qualified Data.Text as T
 
 errorCaseTest :: Either String [Tweet] -> Expectation
 errorCaseTest timeline = do
   case timeline of
-    Left err -> err `shouldBe` "Error in $: parsing [] failed, expected Array, but encountered Object"
-    Right tl -> "bad" `shouldBe` "case"
+    Left  err -> err `shouldBe` "Error in $: parsing [] failed, expected Array, but encountered Object"
+    Right _   -> "bad" `shouldBe` "case"
 
 timelineTweetCountEq :: Either String [Tweet] -> Int -> Expectation
 timelineTweetCountEq timeline tweetCount = do
   case timeline of
-    Left err -> "bad" `shouldBe` "case"
+    Left  _  -> "bad" `shouldBe` "case"
     Right tl -> (length tl) `shouldBe` tweetCount
 
 spec :: Spec
@@ -26,8 +27,8 @@ spec = do
       it "リプライRTを除外" $ do
         timeline <- userTimeline TLRequest { twScreenName = "ant2357", twCount = 100, twExcludeReplies = True, twIncludeRts = False }
         case timeline of
-          Left err -> "bad" `shouldBe` "case"
-          Right tl -> (length tl) `shouldSatisfy` (<= 100)
+          Left  err -> "bad" `shouldBe` "case"
+          Right tl  -> (length tl) `shouldSatisfy` (<= 100)
 
       it "ユーザーにブロックされている" $ do
         timeline <- userTimeline TLRequest { twScreenName = "OffGao", twCount = 20, twExcludeReplies = False, twIncludeRts = True }
@@ -60,3 +61,19 @@ spec = do
       it "countの値が不正(オーバーフロー)" $ do
         timeline <- userTimeline TLRequest { twScreenName = "ant2357", twCount = shortIntMax + 1, twExcludeReplies = False, twIncludeRts = True }
         timeline `timelineTweetCountEq` defaultCount
+
+  describe "tweetのテスト" $ do
+    it "ツイート" $ do
+      let msg = T.pack "にゃーん"
+      res <- tweet msg
+      case (res) of
+        Left  err -> "bad" `shouldBe` "case"
+        Right tw  -> (text tw) `shouldBe` msg
+
+    it "重複ツイート" $ do
+      let msg = T.pack "にゃんこもふもふ"
+      tweet msg
+      res <- tweet msg
+      case (res) of
+        Left  _ -> "goodcase" `shouldBe` "goodcase"
+        Right _ -> "bad" `shouldBe` "case"
