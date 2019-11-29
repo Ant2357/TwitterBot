@@ -6,7 +6,7 @@ import qualified Data.Text as T
 import Data.Text.Encoding
 import Network.HTTP.Conduit
 import Web.Authenticate.OAuth
-import TwSettings
+import Twitter.TwSettings
 
 fav :: String -> IO ()
 fav twId = do

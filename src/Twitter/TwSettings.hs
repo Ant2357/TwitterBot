@@ -1,5 +1,5 @@
 
-module TwSettings where
+module Twitter.TwSettings where
 
 import qualified Data.ByteString.Char8 as S8
 import Web.Authenticate.OAuth

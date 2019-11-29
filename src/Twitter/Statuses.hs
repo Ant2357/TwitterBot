@@ -2,7 +2,7 @@
 {-# LANGUAGE DeriveGeneric #-}
 {-# LANGUAGE DuplicateRecordFields #-}
 
-module Twitter.Statuses (Tweet (..), TLRequest (..), tweet, userTimeline) where
+module Twitter.Statuses (TLRequest (..), tweet, userTimeline) where
 
 import Data.Text
 import Data.Text.Encoding
@@ -10,15 +10,8 @@ import Data.Aeson
 import GHC.Generics
 import Network.HTTP.Conduit
 import Web.Authenticate.OAuth
-import TwSettings
-
-data Tweet = Tweet {
-  id     :: Integer,
-  text   :: Text
-} deriving (Show, Generic)
-
-instance FromJSON Tweet
-instance ToJSON Tweet
+import Twitter.TwSettings
+import Twitter.Data.Tweet
 
 data TLRequest = TLRequest {
   twScreenName     :: String,

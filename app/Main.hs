@@ -4,6 +4,7 @@ module Main where
 
 import Twitter.Statuses
 import Twitter.Favorites
+import Twitter.Data.Tweet
 import qualified Data.Text.IO as T
 
 main = do

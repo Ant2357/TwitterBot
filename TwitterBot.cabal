@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 7cf46fe483797d60a4729d94299991037918ff7f96e6c16e4cc7d8532630efe2
+-- hash: 54830e47b19356cb5909f5d9f68b3273f5247c16f3f5eab178ef9524215dded7
 
 name:           TwitterBot
 version:        0.1.0.0
@@ -27,9 +27,10 @@ source-repository head
 
 library
   exposed-modules:
+      Twitter.Data.Tweet
       Twitter.Favorites
       Twitter.Statuses
-      TwSettings
+      Twitter.TwSettings
   other-modules:
       Paths_TwitterBot
   hs-source-dirs:

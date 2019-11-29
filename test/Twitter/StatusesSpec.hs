@@ -3,6 +3,7 @@ module Twitter.StatusesSpec (spec) where
 
 import Test.Hspec
 import Twitter.Statuses
+import Twitter.Data.Tweet
 import qualified Data.Text as T
 
 errorCaseTest :: Either String [Tweet] -> Expectation
