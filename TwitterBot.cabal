@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 54830e47b19356cb5909f5d9f68b3273f5247c16f3f5eab178ef9524215dded7
+-- hash: b2fe6999ce886dd4cf1eab36259cd03066adfe442f9a19d43ba07818ffa36997
 
 name:           TwitterBot
 version:        0.1.0.0
@@ -61,6 +61,7 @@ test-suite TwitterBot-test
   type: exitcode-stdio-1.0
   main-is: Spec.hs
   other-modules:
+      Twitter.FavoritesSpec
       Twitter.StatusesSpec
       Paths_TwitterBot
   hs-source-dirs:
