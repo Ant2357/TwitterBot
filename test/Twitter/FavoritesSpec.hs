@@ -15,12 +15,12 @@ badCaseTest res = do
 spec :: Spec
 spec = do
   describe "いいねのテスト" $ do
-    let twId = "1175793383412862976"
+    let twId = 1175793383412862976
     it "いいねする" $ do
       res <- fav twId
       case res of
         Left  err -> "bad" `shouldBe` "case"
-        Right tw  -> (id tw) `shouldBe` (read twId)
+        Right tw  -> (id tw) `shouldBe` twId
 
     it "いいね済みのツイートにいいね" $ do
       res <- fav twId
@@ -30,17 +30,12 @@ spec = do
       res <- unFav twId
       case res of
         Left  err -> "bad" `shouldBe` "case"
-        Right tw  -> (id tw) `shouldBe` (read twId)
+        Right tw  -> (id tw) `shouldBe` twId
 
     it "未いいねに対していいね解除" $ do
       res <- unFav twId
       badCaseTest res
 
-    context "異常系" $ do
-      it "実在しないツイートID" $ do
-        res <- unFav "0"
-        badCaseTest res
-
-      it "ツイートIDが不正" $ do
-        res <- unFav "abcd"
-        badCaseTest res
+    it "実在しないTweetID" $ do
+      res <- fav (-1)
+      badCaseTest res

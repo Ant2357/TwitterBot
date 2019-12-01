@@ -8,7 +8,7 @@ import Twitter.Data.Tweet
 import qualified Data.Text.IO as T
 
 main = do
-  fav "1175793383412862976"
+  fav 1175793383412862976
   tweet "しろたん"
 
   timeline <- userTimeline TLRequest {
