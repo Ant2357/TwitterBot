@@ -21,12 +21,13 @@ timelineTweetCountEq timeline tweetCount = do
 spec :: Spec
 spec = do
   describe "userTimelineのテスト" $ do
+    let screenName = "github"
     context "正常系" $ do
       it "リプライRTの除外無し" $ do
-        timeline <- userTimeline TLRequest { twScreenName = "ant2357", twCount = 100, twExcludeReplies = False, twIncludeRts = True }
+        timeline <- userTimeline TLRequest { twScreenName = screenName, twCount = 100, twExcludeReplies = False, twIncludeRts = True }
         timeline `timelineTweetCountEq` 100
       it "リプライRTを除外" $ do
-        timeline <- userTimeline TLRequest { twScreenName = "ant2357", twCount = 100, twExcludeReplies = True, twIncludeRts = False }
+        timeline <- userTimeline TLRequest { twScreenName = screenName, twCount = 100, twExcludeReplies = True, twIncludeRts = False }
         case timeline of
           Left  err -> "bad" `shouldBe` "case"
           Right tl  -> (length tl) `shouldSatisfy` (<= 100)
@@ -47,20 +48,20 @@ spec = do
       let shortIntMax  = 32767
 
       it "countの上限" $ do
-        timeline <- userTimeline TLRequest { twScreenName = "ant2357", twCount = maxTwCount, twExcludeReplies = False, twIncludeRts = True }
+        timeline <- userTimeline TLRequest { twScreenName = screenName, twCount = maxTwCount, twExcludeReplies = False, twIncludeRts = True }
         timeline `timelineTweetCountEq` maxTwCount
 
       it "countの上限越え" $ do
-        timeline <- userTimeline TLRequest { twScreenName = "ant2357", twCount = maxTwCount + 1000, twExcludeReplies = False, twIncludeRts = True }
+        timeline <- userTimeline TLRequest { twScreenName = screenName, twCount = maxTwCount + 1000, twExcludeReplies = False, twIncludeRts = True }
         timeline `timelineTweetCountEq` maxTwCount
 
       -- countの値が不正な場合は、countを省略した扱いになる (countのデフォルト値: 20)
       it "countの値が不正(負の数)" $ do
-        timeline <- userTimeline TLRequest { twScreenName = "ant2357", twCount = -1, twExcludeReplies = False, twIncludeRts = True }
+        timeline <- userTimeline TLRequest { twScreenName = screenName, twCount = -1, twExcludeReplies = False, twIncludeRts = True }
         timeline `timelineTweetCountEq` defaultCount
 
       it "countの値が不正(オーバーフロー)" $ do
-        timeline <- userTimeline TLRequest { twScreenName = "ant2357", twCount = shortIntMax + 1, twExcludeReplies = False, twIncludeRts = True }
+        timeline <- userTimeline TLRequest { twScreenName = screenName, twCount = shortIntMax + 1, twExcludeReplies = False, twIncludeRts = True }
         timeline `timelineTweetCountEq` defaultCount
 
   describe "tweetのテスト" $ do
