@@ -2,7 +2,7 @@
 {-# LANGUAGE DeriveGeneric #-}
 {-# LANGUAGE DuplicateRecordFields #-}
 
-module Twitter.Statuses (TLRequest (..), tweet, userTimeline) where
+module Twitter.Statuses (TLRequest (..), tweet, unTweet, userTimeline) where
 
 import Data.Text
 import Data.Text.Encoding
@@ -25,6 +25,18 @@ tweet tw = do
   req         <- parseRequest "https://api.twitter.com/1.1/statuses/update.json"
   manager     <- newManager tlsManagerSettings
   let postReq  = urlEncodedBody [("status", encodeUtf8 tw)] req
+  signedReq   <- signOAuth twOAuth twCredential postReq
+  res         <- httpLbs signedReq manager
+  return $ eitherDecode $ responseBody res
+
+unTweet :: Integer -> IO (Either String Tweet)
+unTweet twId = do
+  req         <- parseRequest
+                $ "https://api.twitter.com/1.1/statuses/destroy/"
+                ++ (show twId)
+                ++ ".json"
+  manager     <- newManager tlsManagerSettings
+  let postReq  = urlEncodedBody [("trim_user", "false")] req
   signedReq   <- signOAuth twOAuth twCredential postReq
   res         <- httpLbs signedReq manager
   return $ eitherDecode $ responseBody res

@@ -4,7 +4,9 @@ module Twitter.StatusesSpec (spec) where
 import Test.Hspec
 import Twitter.Statuses
 import Twitter.Data.Tweet
-import qualified Data.Text as T
+import qualified Data.Text    as T
+import qualified Data.Text.IO as T
+import Prelude hiding (id)
 
 errorCaseTest :: Either String [Tweet] -> Expectation
 errorCaseTest timeline = do
@@ -65,17 +67,33 @@ spec = do
         timeline `timelineTweetCountEq` defaultCount
 
   describe "tweetのテスト" $ do
+    let twMsg = T.pack "にゃーん"
     it "ツイート" $ do
-      let msg = T.pack "にゃーん"
-      res <- tweet msg
-      case (res) of
+      res <- tweet twMsg
+      case res of
         Left  err -> "bad" `shouldBe` "case"
-        Right tw  -> (text tw) `shouldBe` msg
+        Right tw  -> (text tw) `shouldBe` twMsg
 
     it "重複ツイート" $ do
-      let msg = T.pack "にゃんこもふもふ"
-      tweet msg
-      res <- tweet msg
-      case (res) of
+      res <- tweet twMsg
+      case res of
         Left  _ -> "goodcase" `shouldBe` "goodcase"
         Right _ -> "bad" `shouldBe` "case"
+
+  describe "unTweetのテスト" $ do
+    it "ツイート削除" $ do
+      timeline <- userTimeline TLRequest { twScreenName = "ant2357", twCount = 1, twExcludeReplies = False, twIncludeRts = True }
+      case timeline of
+        Left  _  -> "timelineBad" `shouldBe` "case"
+        Right tl -> do
+          let delTwId = id (tl !! 0)
+          res <- unTweet delTwId
+          case res of
+            Left  err -> "bad" `shouldBe` "case"
+            Right tw  -> (id tw) `shouldBe` delTwId
+
+    it "存在しないツイートを削除" $ do
+      res <- unTweet 0
+      case res of
+        Left  err -> "goodcase" `shouldBe` "goodcase"
+        Right tw  -> "bad" `shouldBe` "case"
