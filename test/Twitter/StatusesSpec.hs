@@ -31,8 +31,8 @@ spec = do
       it "リプライRTを除外" $ do
         timeline <- userTimeline TLRequest { twScreenName = screenName, twCount = 100, twExcludeReplies = True, twIncludeRts = False }
         case timeline of
-          Left  err -> "bad" `shouldBe` "case"
-          Right tl  -> (length tl) `shouldSatisfy` (<= 100)
+          Left  _  -> "bad" `shouldBe` "case"
+          Right tl -> (length tl) `shouldSatisfy` (<= 100)
 
       it "ユーザーにブロックされている" $ do
         timeline <- userTimeline TLRequest { twScreenName = "OffGao", twCount = 20, twExcludeReplies = False, twIncludeRts = True }
@@ -71,8 +71,8 @@ spec = do
     it "ツイート" $ do
       res <- tweet twMsg
       case res of
-        Left  err -> "bad" `shouldBe` "case"
-        Right tw  -> (text tw) `shouldBe` twMsg
+        Left  _  -> "bad" `shouldBe` "case"
+        Right tw -> (text tw) `shouldBe` twMsg
 
     it "重複ツイート" $ do
       res <- tweet twMsg
@@ -89,11 +89,11 @@ spec = do
           let delTwId = id (tl !! 0)
           res <- unTweet delTwId
           case res of
-            Left  err -> "bad" `shouldBe` "case"
-            Right tw  -> (id tw) `shouldBe` delTwId
+            Left  _  -> "bad" `shouldBe` "case"
+            Right tw -> (id tw) `shouldBe` delTwId
 
     it "存在しないツイートを削除" $ do
       res <- unTweet 0
       case res of
-        Left  err -> "goodcase" `shouldBe` "goodcase"
-        Right tw  -> "bad" `shouldBe` "case"
+        Left  _ -> "goodcase" `shouldBe` "goodcase"
+        Right _ -> "bad" `shouldBe` "case"
