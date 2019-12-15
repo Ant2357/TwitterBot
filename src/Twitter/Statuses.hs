@@ -23,10 +23,9 @@ data TLRequest = TLRequest {
 tweet :: Text -> IO (Either String Tweet)
 tweet tw = do
   req         <- parseRequest "https://api.twitter.com/1.1/statuses/update.json"
-  manager     <- newManager tlsManagerSettings
   let postReq  = urlEncodedBody [("status", encodeUtf8 tw)] req
   signedReq   <- signOAuth twOAuth twCredential postReq
-  res         <- httpLbs signedReq manager
+  res         <- httpLbs signedReq =<< (newManager tlsManagerSettings)
   return $ eitherDecode $ responseBody res
 
 unTweet :: Integer -> IO (Either String Tweet)
@@ -35,10 +34,9 @@ unTweet twId = do
                 $ "https://api.twitter.com/1.1/statuses/destroy/"
                 ++ (show twId)
                 ++ ".json"
-  manager     <- newManager tlsManagerSettings
   let postReq  = urlEncodedBody [("trim_user", "false")] req
   signedReq   <- signOAuth twOAuth twCredential postReq
-  res         <- httpLbs signedReq manager
+  res         <- httpLbs signedReq =<< (newManager tlsManagerSettings)
   return $ eitherDecode $ responseBody res
 
 userTimeline :: TLRequest -> IO (Either String [Tweet])
@@ -50,6 +48,5 @@ userTimeline tRequest = do
               ++ "&exclude_replies=" ++ show (twExcludeReplies tRequest)
               ++ "&include_rts=" ++ show (twIncludeRts tRequest)
   signedReq <- signOAuth twOAuth twCredential req
-  manager   <- newManager tlsManagerSettings
-  res       <- httpLbs signedReq manager
+  res       <- httpLbs signedReq =<< (newManager tlsManagerSettings)
   return $ eitherDecode $ responseBody res
