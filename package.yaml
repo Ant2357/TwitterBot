@@ -27,9 +27,10 @@ library:
   dependencies:
   - http-conduit
   - authenticate-oauth
+  - bytestring
   - text
   - aeson
-  - bytestring
+  - base64-bytestring
 
 executables:
   TwitterBot-exe:
@@ -42,6 +43,8 @@ executables:
     dependencies:
     - TwitterBot
     - text
+    - bytestring
+    - directory
 
 tests:
   TwitterBot-test:
@@ -54,4 +57,6 @@ tests:
     dependencies:
     - TwitterBot
     - hspec
+    - bytestring
     - text
+    - directory
