@@ -43,8 +43,6 @@ executables:
     dependencies:
     - TwitterBot
     - text
-    - bytestring
-    - directory
 
 tests:
   TwitterBot-test:
