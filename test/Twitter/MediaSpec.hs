@@ -11,7 +11,7 @@ spec = do
   describe "mediaUploadのテスト" $ do
     it "画像送信" $ do
       dir       <- getCurrentDirectory
-      mediaFile <- B8.readFile $ dir ++ "/src/Img/example.jpg"
+      mediaFile <- B8.readFile $ dir ++ "/test/Img/example.jpg"
       res       <- mediaUpload mediaFile
       case res of
         Left err -> "bad" `shouldBe` "case"

@@ -2,8 +2,9 @@
 {-# LANGUAGE DeriveGeneric #-}
 {-# LANGUAGE DuplicateRecordFields #-}
 
-module Twitter.Statuses (TLRequest (..), tweet, unTweet, userTimeline) where
+module Twitter.Statuses (TLRequest (..), tweet, mediaTweet, unTweet, userTimeline) where
 
+import qualified Data.ByteString.Char8 as B8
 import Data.Text
 import Data.Text.Encoding
 import Data.Aeson
@@ -24,6 +25,14 @@ tweet :: Text -> IO (Either String Tweet)
 tweet tw = do
   req         <- parseRequest "https://api.twitter.com/1.1/statuses/update.json"
   let postReq  = urlEncodedBody [("status", encodeUtf8 tw)] req
+  signedReq   <- signOAuth twOAuth twCredential postReq
+  res         <- httpLbs signedReq =<< (newManager tlsManagerSettings)
+  return $ eitherDecode $ responseBody res
+
+mediaTweet :: Text -> Integer -> IO (Either String Tweet)
+mediaTweet tw mediaData = do
+  req         <- parseRequest "https://api.twitter.com/1.1/statuses/update.json"
+  let postReq  = urlEncodedBody [("status", encodeUtf8 tw), ("media_ids", (B8.pack . show) mediaData)] req
   signedReq   <- signOAuth twOAuth twCredential postReq
   res         <- httpLbs signedReq =<< (newManager tlsManagerSettings)
   return $ eitherDecode $ responseBody res

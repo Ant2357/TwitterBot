@@ -1,11 +1,15 @@
+{-# LANGUAGE OverloadedStrings #-}
 
 module Twitter.StatusesSpec (spec) where
 
 import Test.Hspec
 import Twitter.Statuses
+import Twitter.Media
 import Twitter.Data.Tweet
-import qualified Data.Text    as T
-import qualified Data.Text.IO as T
+import qualified Data.ByteString.Char8 as B8
+import qualified Data.Text             as T
+import qualified Data.Text.IO          as T
+import System.Directory
 import Prelude hiding (id)
 
 errorCaseTest :: Either String [Tweet] -> Expectation
@@ -67,7 +71,7 @@ spec = do
         timeline `timelineTweetCountEq` defaultCount
 
   describe "tweetのテスト" $ do
-    let twMsg = T.pack "にゃーん"
+    let twMsg = "にゃーん"
     it "ツイート" $ do
       res <- tweet twMsg
       case res of
@@ -80,17 +84,32 @@ spec = do
         Left  _ -> "goodcase" `shouldBe` "goodcase"
         Right _ -> "bad" `shouldBe` "case"
 
+  describe "mediaTweetのテスト" $ do
+    it "画像ツイート" $ do
+      let twMsg = "#Haskellから画像ツイート"
+      dir       <- getCurrentDirectory
+      mediaFile <- B8.readFile $ dir ++ "/test/Img/example.jpg"
+      mediaRes  <- mediaUpload mediaFile
+      case mediaRes of
+        Left  _ -> "mediaBad" `shouldBe` "case"
+        Right m -> do
+          res <- mediaTweet twMsg (media_id m)
+          case res of
+            Left  _  -> "bad" `shouldBe` "case"
+            Right tw -> (T.take (T.length twMsg) (text tw)) `shouldBe` twMsg
+
   describe "unTweetのテスト" $ do
     it "ツイート削除" $ do
-      timeline <- userTimeline TLRequest { twScreenName = "ant2357", twCount = 1, twExcludeReplies = False, twIncludeRts = True }
+      timeline <- userTimeline TLRequest { twScreenName = "ant2357", twCount = 2, twExcludeReplies = False, twIncludeRts = True }
       case timeline of
         Left  _  -> "timelineBad" `shouldBe` "case"
-        Right tl -> do
-          let delTwId = id (tl !! 0)
+        Right tl -> mapM_ (\tw -> do
+          let delTwId = id tw
           res <- unTweet delTwId
           case res of
             Left  _  -> "bad" `shouldBe` "case"
             Right tw -> (id tw) `shouldBe` delTwId
+          ) tl
 
     it "存在しないツイートを削除" $ do
       res <- unTweet 0
