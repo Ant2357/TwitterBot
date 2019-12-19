@@ -45,7 +45,7 @@ spec = do
         timeline <- userTimeline TLRequest { twScreenName = "paiza_run", twCount = 20, twExcludeReplies = False, twIncludeRts = True }
         errorCaseTest timeline
       it "存在しないユーザー" $ do
-        timeline <- userTimeline TLRequest { twScreenName = "ant24653", twCount = 20, twExcludeReplies = True,  twIncludeRts = False }
+        timeline <- userTimeline TLRequest { twScreenName = "ant2357_run", twCount = 20, twExcludeReplies = True,  twIncludeRts = False }
         errorCaseTest timeline
 
     context "count関連のテスト" $ do
