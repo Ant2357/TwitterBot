@@ -30,9 +30,9 @@ tweet tw = do
   return $ eitherDecode $ responseBody res
 
 mediaTweet :: Text -> Integer -> IO (Either String Tweet)
-mediaTweet tw mediaData = do
+mediaTweet tw mediaIds = do
   req         <- parseRequest "https://api.twitter.com/1.1/statuses/update.json"
-  let postReq  = urlEncodedBody [("status", encodeUtf8 tw), ("media_ids", (B8.pack . show) mediaData)] req
+  let postReq  = urlEncodedBody [("status", encodeUtf8 tw), ("media_ids", (B8.pack . show) mediaIds)] req
   signedReq   <- signOAuth twOAuth twCredential postReq
   res         <- httpLbs signedReq =<< (newManager tlsManagerSettings)
   return $ eitherDecode $ responseBody res

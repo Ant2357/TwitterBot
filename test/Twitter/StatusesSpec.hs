@@ -86,7 +86,7 @@ spec = do
 
   describe "mediaTweetのテスト" $ do
     it "画像ツイート" $ do
-      let twMsg = "#Haskellから画像ツイート"
+      let twMsg = "Haskellから画像ツイート"
       dir       <- getCurrentDirectory
       mediaFile <- B8.readFile $ dir ++ "/test/Img/example.jpg"
       mediaRes  <- mediaUpload mediaFile
