@@ -3,6 +3,7 @@
 module Twitter.StatusesSpec (spec) where
 
 import Test.Hspec
+import Control.Exception (evaluate)
 import Twitter.Statuses
 import Twitter.Media
 import Twitter.Data.Tweet
@@ -26,49 +27,32 @@ timelineTweetCountEq timeline tweetCount = do
 
 spec :: Spec
 spec = do
+  describe "makeTLRequestのテスト" $ do
+    it "countが不正(1未満)" $ do
+      evaluate (makeTLRequest "ant2357" 0 False True) `shouldThrow` errorCall "count range: 1 <= count <= 200"
+    it "countが不正(200超え)" $ do
+      evaluate (makeTLRequest "ant2357" 201 False True) `shouldThrow` errorCall "count range: 1 <= count <= 200"
+
   describe "userTimelineのテスト" $ do
     let screenName = "github"
-    context "正常系" $ do
-      it "リプライRTの除外無し" $ do
-        timeline <- userTimeline TLRequest { twScreenName = screenName, twCount = 100, twExcludeReplies = False, twIncludeRts = True }
-        timeline `timelineTweetCountEq` 100
-      it "リプライRTを除外" $ do
-        timeline <- userTimeline TLRequest { twScreenName = screenName, twCount = 100, twExcludeReplies = True, twIncludeRts = False }
-        case timeline of
-          Left  _  -> "bad" `shouldBe` "case"
-          Right tl -> (length tl) `shouldSatisfy` (<= 100)
+    it "リプライRTの除外無し" $ do
+      timeline <- userTimeline $ makeTLRequest screenName 100 False True
+      timeline `timelineTweetCountEq` 100
+    it "リプライRTを除外" $ do
+      timeline <- userTimeline $ makeTLRequest screenName 100 True False
+      case timeline of
+        Left  _  -> "bad" `shouldBe` "case"
+        Right tl -> (length tl) `shouldSatisfy` (<= 100)
 
-      it "ユーザーにブロックされている" $ do
-        timeline <- userTimeline TLRequest { twScreenName = "OffGao", twCount = 20, twExcludeReplies = False, twIncludeRts = True }
-        errorCaseTest timeline
-      it "ユーザーが凍結している" $ do
-        timeline <- userTimeline TLRequest { twScreenName = "paiza_run", twCount = 20, twExcludeReplies = False, twIncludeRts = True }
-        errorCaseTest timeline
-      it "存在しないユーザー" $ do
-        timeline <- userTimeline TLRequest { twScreenName = "ant2357_run", twCount = 20, twExcludeReplies = True,  twIncludeRts = False }
-        errorCaseTest timeline
-
-    context "count関連のテスト" $ do
-      let defaultCount = 20
-      let maxTwCount   = 200
-      let shortIntMax  = 32767
-
-      it "countの上限" $ do
-        timeline <- userTimeline TLRequest { twScreenName = screenName, twCount = maxTwCount, twExcludeReplies = False, twIncludeRts = True }
-        timeline `timelineTweetCountEq` maxTwCount
-
-      it "countの上限越え" $ do
-        timeline <- userTimeline TLRequest { twScreenName = screenName, twCount = maxTwCount + 1000, twExcludeReplies = False, twIncludeRts = True }
-        timeline `timelineTweetCountEq` maxTwCount
-
-      -- countの値が不正な場合は、countを省略した扱いになる (countのデフォルト値: 20)
-      it "countの値が不正(負の数)" $ do
-        timeline <- userTimeline TLRequest { twScreenName = screenName, twCount = -1, twExcludeReplies = False, twIncludeRts = True }
-        timeline `timelineTweetCountEq` defaultCount
-
-      it "countの値が不正(オーバーフロー)" $ do
-        timeline <- userTimeline TLRequest { twScreenName = screenName, twCount = shortIntMax + 1, twExcludeReplies = False, twIncludeRts = True }
-        timeline `timelineTweetCountEq` defaultCount
+    it "ユーザーにブロックされている" $ do
+      timeline <- userTimeline $ makeTLRequest "OffGao" 20 False True
+      errorCaseTest timeline
+    it "ユーザーが凍結している" $ do
+      timeline <- userTimeline $ makeTLRequest "paiza_run" 20 False True
+      errorCaseTest timeline
+    it "存在しないユーザー" $ do
+      timeline <- userTimeline $ makeTLRequest "ant2357_run" 20 False True
+      errorCaseTest timeline
 
   describe "tweetのテスト" $ do
     let twMsg = "にゃーん"
@@ -100,7 +84,7 @@ spec = do
 
   describe "unTweetのテスト" $ do
     it "ツイート削除" $ do
-      timeline <- userTimeline TLRequest { twScreenName = "ant2357", twCount = 2, twExcludeReplies = False, twIncludeRts = True }
+      timeline <- userTimeline $ makeTLRequest "ant2357" 2 False True
       case timeline of
         Left  _  -> "timelineBad" `shouldBe` "case"
         Right tl -> mapM_ (\tw -> do

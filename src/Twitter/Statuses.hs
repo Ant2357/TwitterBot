@@ -2,7 +2,7 @@
 {-# LANGUAGE DeriveGeneric #-}
 {-# LANGUAGE DuplicateRecordFields #-}
 
-module Twitter.Statuses (TLRequest (..), tweet, mediaTweet, unTweet, userTimeline) where
+module Twitter.Statuses (TLRequest, makeTLRequest, tweet, mediaTweet, unTweet, userTimeline) where
 
 import qualified Data.ByteString.Char8 as B8
 import Data.Text
@@ -20,6 +20,16 @@ data TLRequest = TLRequest {
   twExcludeReplies :: Bool,
   twIncludeRts     :: Bool
 } deriving (Show, Generic)
+
+makeTLRequest :: String -> Int -> Bool -> Bool -> TLRequest
+makeTLRequest twScreenName twCount twExcludeReplies twIncludeRts
+  | twCount < 1 || 200 < twCount = error "count range: 1 <= count <= 200"
+  | otherwise                    = TLRequest
+    { twScreenName     = twScreenName
+    , twCount          = twCount
+    , twExcludeReplies = twExcludeReplies
+    , twIncludeRts     = twIncludeRts
+    }
 
 tweet :: Text -> IO (Either String Tweet)
 tweet tw = do
