@@ -1,6 +1,5 @@
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE DeriveGeneric #-}
-{-# LANGUAGE DuplicateRecordFields #-}
 
 module Twitter.Statuses (TLRequest, makeTLRequest, tweet, mediaTweet, unTweet, userTimeline) where
 
