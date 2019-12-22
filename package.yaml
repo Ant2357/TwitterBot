@@ -31,6 +31,7 @@ library:
   - text
   - aeson
   - base64-bytestring
+  - uri-encode
 
 executables:
   TwitterBot-exe:
