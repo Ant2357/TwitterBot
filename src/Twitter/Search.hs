@@ -17,7 +17,7 @@ data SearchResult = SearchResult {
   statuses :: [Tweet]
 } deriving (Show, Generic)
 instance FromJSON SearchResult
-instance ToJSON SearchResult
+instance ToJSON   SearchResult
 
 data SearchRequest = SearchRequest {
   searchQ     :: Text,

@@ -15,7 +15,7 @@ fav twId = do
   req         <- parseRequest "https://api.twitter.com/1.1/favorites/create.json"
   let postReq  = urlEncodedBody [("id", (B8.pack . show) twId)] req
   signedReq   <- signOAuth twOAuth twCredential postReq
-  res         <- httpLbs signedReq  =<< (newManager tlsManagerSettings)
+  res         <- httpLbs signedReq =<< (newManager tlsManagerSettings)
   return $ eitherDecode $ responseBody res
 
 unFav :: Integer -> IO (Either String Tweet)

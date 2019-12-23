@@ -16,13 +16,13 @@ import Prelude hiding (id)
 errorCaseTest :: Either String [Tweet] -> Expectation
 errorCaseTest timeline = do
   case timeline of
-    Left  err -> err `shouldBe` "Error in $: parsing [] failed, expected Array, but encountered Object"
+    Left  err -> err   `shouldBe` "Error in $: parsing [] failed, expected Array, but encountered Object"
     Right _   -> "bad" `shouldBe` "case"
 
 timelineTweetCountEq :: Either String [Tweet] -> Int -> Expectation
 timelineTweetCountEq timeline tweetCount = do
   case timeline of
-    Left  _  -> "bad" `shouldBe` "case"
+    Left  _  -> "bad"       `shouldBe` "case"
     Right tl -> (length tl) `shouldBe` tweetCount
 
 spec :: Spec
@@ -41,7 +41,7 @@ spec = do
     it "リプライRTを除外" $ do
       timeline <- userTimeline $ makeTLRequest screenName 100 True False
       case timeline of
-        Left  _  -> "bad" `shouldBe` "case"
+        Left  _  -> "bad"       `shouldBe`      "case"
         Right tl -> (length tl) `shouldSatisfy` (<= 100)
 
     it "ユーザーにブロックされている" $ do
@@ -59,14 +59,14 @@ spec = do
     it "ツイート" $ do
       res <- tweet twMsg
       case res of
-        Left  _  -> "bad" `shouldBe` "case"
+        Left  _  -> "bad"     `shouldBe` "case"
         Right tw -> (text tw) `shouldBe` twMsg
 
     it "重複ツイート" $ do
       res <- tweet twMsg
       case res of
         Left  _ -> "goodcase" `shouldBe` "goodcase"
-        Right _ -> "bad" `shouldBe` "case"
+        Right _ -> "bad"      `shouldBe` "case"
 
   describe "mediaTweetのテスト" $ do
     it "画像ツイート" $ do
@@ -79,7 +79,7 @@ spec = do
         Right m -> do
           res <- mediaTweet twMsg (media_id m)
           case res of
-            Left  _  -> "bad" `shouldBe` "case"
+            Left  _  -> "bad"                               `shouldBe` "case"
             Right tw -> (T.take (T.length twMsg) (text tw)) `shouldBe` twMsg
 
   describe "unTweetのテスト" $ do
@@ -91,7 +91,7 @@ spec = do
           let delTwId = id tw
           res <- unTweet delTwId
           case res of
-            Left  _  -> "bad" `shouldBe` "case"
+            Left  _  -> "bad"   `shouldBe` "case"
             Right tw -> (id tw) `shouldBe` delTwId
           ) tl
 
@@ -99,4 +99,4 @@ spec = do
       res <- unTweet 0
       case res of
         Left  _ -> "goodcase" `shouldBe` "goodcase"
-        Right _ -> "bad" `shouldBe` "case"
+        Right _ -> "bad"      `shouldBe` "case"

@@ -15,19 +15,19 @@ spec = do
     it "人気のツイート検索" $ do
       res <- search $ makeSearchRequest searchQ "popular" searchCount
       case res of
-        Left  _  -> "bad" `shouldBe` "case"
+        Left  _  -> "bad"                    `shouldBe`      "case"
         Right tl -> ((length . statuses) tl) `shouldSatisfy` (<= searchCount)
 
     it "最新のツイート検索" $ do
       res <- search $ makeSearchRequest searchQ "recent" searchCount
       case res of
-        Left  _  -> "bad" `shouldBe` "case"
+        Left  _  -> "bad"                    `shouldBe`      "case"
         Right tl -> ((length . statuses) tl) `shouldSatisfy` (<= searchCount)
 
     it "全てのツイート検索" $ do
       res <- search $ makeSearchRequest searchQ "mixed" searchCount
       case res of
-        Left  _  -> "bad" `shouldBe` "case"
+        Left  _  -> "bad"                    `shouldBe`      "case"
         Right tl -> ((length . statuses) tl) `shouldSatisfy` (<= searchCount)
 
     it "不正なsearchQ(1未満)" $ do

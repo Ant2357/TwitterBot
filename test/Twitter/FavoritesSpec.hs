@@ -10,7 +10,7 @@ badCaseTest :: Either String Tweet -> Expectation
 badCaseTest res = do
   case res of
     Left  err -> "goodcase" `shouldBe` "goodcase"
-    Right tw  -> "bad" `shouldBe` "case"
+    Right tw  -> "bad"      `shouldBe` "case"
 
 spec :: Spec
 spec = do
@@ -19,7 +19,7 @@ spec = do
     it "いいねする" $ do
       res <- fav twId
       case res of
-        Left  err -> "bad" `shouldBe` "case"
+        Left  err -> "bad"   `shouldBe` "case"
         Right tw  -> (id tw) `shouldBe` twId
 
     it "いいね済みのツイートにいいね" $ do
@@ -29,7 +29,7 @@ spec = do
     it "いいね解除" $ do
       res <- unFav twId
       case res of
-        Left  err -> "bad" `shouldBe` "case"
+        Left  err -> "bad"   `shouldBe` "case"
         Right tw  -> (id tw) `shouldBe` twId
 
     it "未いいねに対していいね解除" $ do

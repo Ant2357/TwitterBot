@@ -14,5 +14,5 @@ spec = do
       mediaFile <- B8.readFile $ dir ++ "/test/Img/example.jpg"
       res       <- mediaUpload mediaFile
       case res of
-        Left err -> "bad" `shouldBe` "case"
+        Left err -> "bad"      `shouldBe` "case"
         Right m  -> "goodcase" `shouldBe` "goodcase"

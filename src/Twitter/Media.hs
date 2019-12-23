@@ -17,7 +17,7 @@ data MediaInfo = MediaInfo {
 } deriving (Show, Generic)
 
 instance FromJSON MediaInfo
-instance ToJSON MediaInfo
+instance ToJSON   MediaInfo
 
 mediaUpload :: B8.ByteString -> IO (Either String MediaInfo)
 mediaUpload mediaData = do
