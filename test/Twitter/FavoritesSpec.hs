@@ -9,8 +9,8 @@ import Prelude hiding (id)
 badCaseTest :: Either String Tweet -> Expectation
 badCaseTest res = do
   case res of
-    Left  err -> "goodcase" `shouldBe` "goodcase"
-    Right tw  -> "bad"      `shouldBe` "case"
+    Left  _  -> "goodcase" `shouldBe` "goodcase"
+    Right tw -> "bad"      `shouldBe` "case"
 
 spec :: Spec
 spec = do
@@ -19,8 +19,8 @@ spec = do
     it "いいねする" $ do
       res <- fav twId
       case res of
-        Left  err -> "bad"   `shouldBe` "case"
-        Right tw  -> (id tw) `shouldBe` twId
+        Left  _  -> "bad"   `shouldBe` "case"
+        Right tw -> (id tw) `shouldBe` twId
 
     it "いいね済みのツイートにいいね" $ do
       res <- fav twId
@@ -29,8 +29,8 @@ spec = do
     it "いいね解除" $ do
       res <- unFav twId
       case res of
-        Left  err -> "bad"   `shouldBe` "case"
-        Right tw  -> (id tw) `shouldBe` twId
+        Left  _  -> "bad"   `shouldBe` "case"
+        Right tw -> (id tw) `shouldBe` twId
 
     it "未いいねに対していいね解除" $ do
       res <- unFav twId

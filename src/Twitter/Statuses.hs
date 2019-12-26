@@ -1,7 +1,15 @@
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE DeriveGeneric #-}
 
-module Twitter.Statuses (TLRequest, makeTLRequest, tweet, mediaTweet, unTweet, userTimeline) where
+module Twitter.Statuses ( TLRequest
+                        , makeTLRequest
+                        , userTimeline
+                        , tweet
+                        , mediaTweet
+                        , unTweet
+                        , retweet
+                        , unRetweet
+                        ) where
 
 import qualified Data.ByteString.Char8 as B8
 import Data.Text
@@ -30,6 +38,18 @@ makeTLRequest twScreenName twCount twExcludeReplies twIncludeRts
     , twIncludeRts     = twIncludeRts
     }
 
+userTimeline :: TLRequest -> IO (Either String [Tweet])
+userTimeline tRequest = do
+  req       <- parseRequest
+              $ "https://api.twitter.com/1.1/statuses/user_timeline.json"
+              ++ "?screen_name=" ++ twScreenName tRequest
+              ++ "&count=" ++ show (twCount tRequest)
+              ++ "&exclude_replies=" ++ show (twExcludeReplies tRequest)
+              ++ "&include_rts=" ++ show (twIncludeRts tRequest)
+  signedReq <- signOAuth twOAuth twCredential req
+  res       <- httpLbs signedReq =<< (newManager tlsManagerSettings)
+  return $ eitherDecode $ responseBody res
+
 tweet :: Text -> IO (Either String Tweet)
 tweet tw = do
   req         <- parseRequest "https://api.twitter.com/1.1/statuses/update.json"
@@ -57,14 +77,24 @@ unTweet twId = do
   res         <- httpLbs signedReq =<< (newManager tlsManagerSettings)
   return $ eitherDecode $ responseBody res
 
-userTimeline :: TLRequest -> IO (Either String [Tweet])
-userTimeline tRequest = do
-  req       <- parseRequest
-              $ "https://api.twitter.com/1.1/statuses/user_timeline.json"
-              ++ "?screen_name=" ++ twScreenName tRequest
-              ++ "&count=" ++ show (twCount tRequest)
-              ++ "&exclude_replies=" ++ show (twExcludeReplies tRequest)
-              ++ "&include_rts=" ++ show (twIncludeRts tRequest)
-  signedReq <- signOAuth twOAuth twCredential req
-  res       <- httpLbs signedReq =<< (newManager tlsManagerSettings)
+retweet :: Integer -> IO (Either String Tweet)
+retweet twId = do
+  req         <- parseRequest
+                $ "https://api.twitter.com/1.1/statuses/retweet/"
+                ++ (show twId)
+                ++ ".json"
+  let postReq  = urlEncodedBody [("trim_user", "false")] req
+  signedReq   <- signOAuth twOAuth twCredential postReq
+  res         <- httpLbs signedReq =<< (newManager tlsManagerSettings)
+  return $ eitherDecode $ responseBody res
+
+unRetweet :: Integer -> IO (Either String Tweet)
+unRetweet twId = do
+  req         <- parseRequest
+                $ "https://api.twitter.com/1.1/statuses/unretweet/"
+                ++ (show twId)
+                ++ ".json"
+  let postReq  = urlEncodedBody [("trim_user", "false")] req
+  signedReq   <- signOAuth twOAuth twCredential postReq
+  res         <- httpLbs signedReq =<< (newManager tlsManagerSettings)
   return $ eitherDecode $ responseBody res

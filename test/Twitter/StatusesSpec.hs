@@ -100,3 +100,35 @@ spec = do
       case res of
         Left  _ -> "goodcase" `shouldBe` "goodcase"
         Right _ -> "bad"      `shouldBe` "case"
+
+  describe "RT関連のテスト" $ do
+    let twId     = 990243814227918851     -- テストするツイートのID
+    let twText   = "ちんちん"              -- ツイート本文
+    let twRtText = "RT @ant2357: ちんちん" -- RTのツイート本文
+
+    it "リツイート" $ do
+      res <- retweet twId
+      case res of
+        Left  _  -> "bad"     `shouldBe` "case"
+        Right tw -> (text tw) `shouldBe` twRtText
+    it "RT済みのツイートをRT" $ do
+      res <- retweet twId
+      case res of
+        Left  _ -> "goodcase" `shouldBe` "goodcase"
+        Right _ -> "bad"      `shouldBe` "case"
+
+    it "RT解除" $ do
+      res <- unRetweet twId
+      case res of
+        Left  _  -> "bad"     `shouldBe` "case"
+        Right tw -> (text tw) `shouldBe` twText
+    it "未RTのツイートをRT解除" $ do
+      {-
+        RTしていないツイートをstatuses/unretweet/:idでRT解除しようとしても、
+        エラーを吐かないTwitterほんまにゃーん
+        何でツイート情報を返してくるの…
+      -}
+      res <- unRetweet twId
+      case res of
+        Left  _  -> "bad"   `shouldBe` "case"
+        Right tw -> (id tw) `shouldBe` twId
