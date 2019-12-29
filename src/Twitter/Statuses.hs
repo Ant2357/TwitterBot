@@ -17,7 +17,6 @@ import Data.Text.Encoding
 import Data.Aeson
 import GHC.Generics
 import Network.HTTP.Conduit
-import Web.Authenticate.OAuth
 import Twitter.TwSettings
 import Twitter.Data.Tweet
 
@@ -46,24 +45,21 @@ userTimeline tRequest = do
               ++ "&count=" ++ show (twCount tRequest)
               ++ "&exclude_replies=" ++ show (twExcludeReplies tRequest)
               ++ "&include_rts=" ++ show (twIncludeRts tRequest)
-  signedReq <- signOAuth twOAuth twCredential req
-  res       <- httpLbs signedReq =<< (newManager tlsManagerSettings)
+  res       <- requestTwitterApi req
   return $ eitherDecode $ responseBody res
 
 tweet :: Text -> IO (Either String Tweet)
 tweet tw = do
   req         <- parseRequest "https://api.twitter.com/1.1/statuses/update.json"
   let postReq  = urlEncodedBody [("status", encodeUtf8 tw)] req
-  signedReq   <- signOAuth twOAuth twCredential postReq
-  res         <- httpLbs signedReq =<< (newManager tlsManagerSettings)
+  res         <- requestTwitterApi postReq
   return $ eitherDecode $ responseBody res
 
 mediaTweet :: Text -> Integer -> IO (Either String Tweet)
 mediaTweet tw mediaIds = do
   req         <- parseRequest "https://api.twitter.com/1.1/statuses/update.json"
   let postReq  = urlEncodedBody [("status", encodeUtf8 tw), ("media_ids", (B8.pack . show) mediaIds)] req
-  signedReq   <- signOAuth twOAuth twCredential postReq
-  res         <- httpLbs signedReq =<< (newManager tlsManagerSettings)
+  res         <- requestTwitterApi postReq
   return $ eitherDecode $ responseBody res
 
 unTweet :: Integer -> IO (Either String Tweet)
@@ -73,8 +69,7 @@ unTweet twId = do
                 ++ (show twId)
                 ++ ".json"
   let postReq  = urlEncodedBody [("trim_user", "false")] req
-  signedReq   <- signOAuth twOAuth twCredential postReq
-  res         <- httpLbs signedReq =<< (newManager tlsManagerSettings)
+  res         <- requestTwitterApi postReq
   return $ eitherDecode $ responseBody res
 
 retweet :: Integer -> IO (Either String Tweet)
@@ -84,8 +79,7 @@ retweet twId = do
                 ++ (show twId)
                 ++ ".json"
   let postReq  = urlEncodedBody [("trim_user", "false")] req
-  signedReq   <- signOAuth twOAuth twCredential postReq
-  res         <- httpLbs signedReq =<< (newManager tlsManagerSettings)
+  res         <- requestTwitterApi postReq
   return $ eitherDecode $ responseBody res
 
 unRetweet :: Integer -> IO (Either String Tweet)
@@ -95,6 +89,5 @@ unRetweet twId = do
                 ++ (show twId)
                 ++ ".json"
   let postReq  = urlEncodedBody [("trim_user", "false")] req
-  signedReq   <- signOAuth twOAuth twCredential postReq
-  res         <- httpLbs signedReq =<< (newManager tlsManagerSettings)
+  res         <- requestTwitterApi postReq
   return $ eitherDecode $ responseBody res

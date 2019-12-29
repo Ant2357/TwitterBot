@@ -1,8 +1,10 @@
+{-# LANGUAGE OverloadedStrings #-}
 
-module Twitter.TwSettings where
+module Twitter.TwSettings (requestTwitterApi) where
 
-import qualified Data.ByteString.Char8 as S8
+import qualified Data.ByteString.Lazy.Internal as S
 import Web.Authenticate.OAuth
+import Network.HTTP.Conduit
 
 consumerKey       = "XXXXXXX"
 consumerSecret    = "XXXXXXX"
@@ -12,11 +14,14 @@ accessTokenSecret = "XXXXXXX"
 twOAuth :: OAuth
 twOAuth = newOAuth {
   oauthServerName     = "api.twitter.com",
-  oauthConsumerKey    = (S8.pack consumerKey),
-  oauthConsumerSecret = (S8.pack consumerSecret)
+  oauthConsumerKey    = consumerKey,
+  oauthConsumerSecret = consumerSecret
 }
 
 twCredential :: Credential
-twCredential = newCredential
-  (S8.pack accessToken)
-  (S8.pack accessTokenSecret)
+twCredential = newCredential accessToken accessTokenSecret
+
+requestTwitterApi :: Request -> IO (Response S.ByteString)
+requestTwitterApi req = do
+  signedReq <- signOAuth twOAuth twCredential req
+  return =<< httpLbs signedReq =<< (newManager tlsManagerSettings)

@@ -1,15 +1,17 @@
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE DeriveGeneric #-}
 
-module Twitter.Search (SearchRequest, makeSearchRequest, SearchResult (..), search) where
+module Twitter.Search ( SearchRequest
+                      , makeSearchRequest
+                      , SearchResult (..)
+                      , search
+                      ) where
 
 import Data.Text
-import Data.Text.Encoding
 import Data.Aeson
 import GHC.Generics
 import Network.URI.Encode
 import Network.HTTP.Conduit
-import Web.Authenticate.OAuth
 import Twitter.TwSettings
 import Twitter.Data.Tweet
 
@@ -46,6 +48,5 @@ search sRequest = do
                 ++ "&locale=ja"
                 ++ "&result_type=" ++ (resultType sRequest)
                 ++ "&count=" ++ ((show . searchCount) sRequest)
-  signedReq   <- signOAuth twOAuth twCredential req
-  res         <- httpLbs signedReq =<< (newManager tlsManagerSettings)
+  res         <- requestTwitterApi req
   return $ eitherDecode $ responseBody res
