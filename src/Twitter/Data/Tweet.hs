@@ -13,4 +13,4 @@ data Tweet = Tweet {
 } deriving (Show, Generic)
 
 instance FromJSON Tweet
-instance ToJSON Tweet
+instance ToJSON   Tweet
