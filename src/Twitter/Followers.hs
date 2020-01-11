@@ -48,17 +48,17 @@ makeFollowerListRequest screenName count
 
 followerIds :: String -> IO (Either String FollowerIdsResult)
 followerIds screenName = do
-  req       <- parseRequest
-              $ "https://api.twitter.com/1.1/followers/ids.json"
-              ++ "?screen_name=" ++ screenName
-  res       <- requestTwitterApi req
+  req <- parseRequest
+          $ "https://api.twitter.com/1.1/followers/ids.json"
+          ++ "?screen_name=" ++ screenName
+  res <- requestTwitterApi req
   return $ eitherDecode $ responseBody res
 
 followerList :: FollowerListRequest -> IO (Either String FollowerListsResult)
 followerList fRequest = do
-  req       <- parseRequest
-              $ "https://api.twitter.com/1.1/followers/list.json"
-              ++ "?screen_name=" ++ screenName fRequest
-              ++ "&count=" ++ show (count fRequest)
-  res       <- requestTwitterApi req
+  req <- parseRequest
+          $ "https://api.twitter.com/1.1/followers/list.json"
+          ++ "?screen_name=" ++ screenName fRequest
+          ++ "&count=" ++ show (count fRequest)
+  res <- requestTwitterApi req
   return $ eitherDecode $ responseBody res
