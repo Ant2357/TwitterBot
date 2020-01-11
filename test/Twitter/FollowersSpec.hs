@@ -10,9 +10,9 @@ spec :: Spec
 spec = do
   describe "makeFollowerListRequestのテスト" $ do
     it "countが不正(1未満)" $ do
-      evaluate (makeFollowerListRequest "ant2357" 0) `shouldThrow` errorCall "count range: 1 <= count <= 200"
+      evaluate (makeFollowerListRequest "alice" 0) `shouldThrow` errorCall "count range: 1 <= count <= 200"
     it "countが不正(200超え)" $ do
-      evaluate (makeFollowerListRequest "ant2357" 201) `shouldThrow` errorCall "count range: 1 <= count <= 200"
+      evaluate (makeFollowerListRequest "alice" 201) `shouldThrow` errorCall "count range: 1 <= count <= 200"
 
   describe "フォロワー一覧の取得テスト" $ do
     let screenName    = "ant2357"

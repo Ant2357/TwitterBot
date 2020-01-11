@@ -4,6 +4,7 @@ module Twitter.StatusesSpec (spec) where
 
 import Test.Hspec
 import Control.Exception (evaluate)
+import Twitter.TwSettings (loginName)
 import Twitter.Statuses
 import Twitter.Media
 import Twitter.Data.Tweet
@@ -29,9 +30,9 @@ spec :: Spec
 spec = do
   describe "makeTLRequestのテスト" $ do
     it "countが不正(1未満)" $ do
-      evaluate (makeTLRequest "ant2357" 0 False True) `shouldThrow` errorCall "count range: 1 <= count <= 200"
+      evaluate (makeTLRequest "alice" 0 False True) `shouldThrow` errorCall "count range: 1 <= count <= 200"
     it "countが不正(200超え)" $ do
-      evaluate (makeTLRequest "ant2357" 201 False True) `shouldThrow` errorCall "count range: 1 <= count <= 200"
+      evaluate (makeTLRequest "alice" 201 False True) `shouldThrow` errorCall "count range: 1 <= count <= 200"
 
   describe "userTimelineのテスト" $ do
     let screenName = "github"
@@ -84,7 +85,7 @@ spec = do
 
   describe "unTweetのテスト" $ do
     it "ツイート削除" $ do
-      timeline <- userTimeline $ makeTLRequest "ant2357" 2 False True
+      timeline <- userTimeline $ makeTLRequest loginName 2 False True
       case timeline of
         Left  _  -> "timelineBad" `shouldBe` "case"
         Right tl -> mapM_ (\tw -> do
@@ -102,9 +103,9 @@ spec = do
         Right _ -> "bad"      `shouldBe` "case"
 
   describe "RT関連のテスト" $ do
-    let twId     = 990243814227918851     -- テストするツイートのID
-    let twText   = "ちんちん"              -- ツイート本文
-    let twRtText = "RT @ant2357: ちんちん" -- RTのツイート本文
+    let twId     = 990243814227918851                          -- テストするツイートのID
+    let twText   = "ちんちん"                                   -- ツイート本文
+    let twRtText = T.pack $ "RT @" ++ loginName ++ ": ちんちん" -- RTのツイート本文
 
     it "リツイート" $ do
       res <- retweet twId
