@@ -45,7 +45,7 @@ unFollow screenName = do
 class Lookup a where
   lookup :: a -> IO (Either String [Relationship])
 
-instance (Num a, Show a, Eq a) => Lookup a where
+instance (Num a, Show a) => Lookup a where
   lookup userId = do
     req <- parseRequest
             $ "https://api.twitter.com/1.1/friendships/lookup.json"
