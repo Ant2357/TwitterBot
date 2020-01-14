@@ -7,11 +7,12 @@
 module Twitter.Friendships (Relationship (..)
                             , follow
                             , unFollow
-                            , lookup
+                            , Twitter.Friendships.lookup
                             ) where
 
 import qualified Data.ByteString.Char8 as B8
-import Data.Text
+import qualified Data.Text             as T
+import Data.List                       as DataList
 import Data.Aeson
 import GHC.Generics
 import Network.HTTP.Conduit
@@ -20,7 +21,7 @@ import Twitter.Data.User
 import Prelude hiding (lookup)
 
 data Relationship = Relationship {
-  name        :: Text,
+  name        :: T.Text,
   screen_name :: String,
   id          :: Integer,
   connections :: [String]
@@ -45,18 +46,20 @@ unFollow screenName = do
 class Lookup a where
   lookup :: a -> IO (Either String [Relationship])
 
-instance (Num a, Show a) => Lookup a where
-  lookup userId = do
+instance (Num a, Show a) => Lookup [a] where
+  lookup userIds = do
+    let userIdsStr = (init . tail . show) userIds
     req <- parseRequest
             $ "https://api.twitter.com/1.1/friendships/lookup.json"
-            ++ "?user_id=" ++ show userId 
+            ++ "?user_id=" ++ userIdsStr 
     res <- requestTwitterApi req
     return $ eitherDecode $ responseBody res
 
-instance Lookup String where
-  lookup screenName = do
+instance Lookup [String] where
+  lookup screenNames = do
+    let screenNamesStr = DataList.intercalate "," screenNames
     req <- parseRequest
             $ "https://api.twitter.com/1.1/friendships/lookup.json"
-            ++ "?screen_name=" ++ screenName
+            ++ "?screen_name=" ++ screenNamesStr
     res <- requestTwitterApi req
     return $ eitherDecode $ responseBody res
