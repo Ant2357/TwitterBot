@@ -8,7 +8,6 @@ import Data.Aeson
 import GHC.Generics
 import Network.HTTP.Conduit
 import Twitter.TwSettings
-import Twitter.Data.User
 import Twitter.Data.IdsInfo
 import Twitter.Data.UserRequest
 import Twitter.Data.UsersInfo
