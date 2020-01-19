@@ -40,11 +40,11 @@ makeTLRequest twScreenName twCount twExcludeReplies twIncludeRts
 userTimeline :: TLRequest -> IO (Either String [Tweet])
 userTimeline tRequest = do
   req <- parseRequest
-          $ "https://api.twitter.com/1.1/statuses/user_timeline.json"
-          ++ "?screen_name=" ++ twScreenName tRequest
-          ++ "&count=" ++ show (twCount tRequest)
-          ++ "&exclude_replies=" ++ show (twExcludeReplies tRequest)
-          ++ "&include_rts=" ++ show (twIncludeRts tRequest)
+      $ "https://api.twitter.com/1.1/statuses/user_timeline.json"
+      ++ "?screen_name=" ++ twScreenName tRequest
+      ++ "&count=" ++ show (twCount tRequest)
+      ++ "&exclude_replies=" ++ show (twExcludeReplies tRequest)
+      ++ "&include_rts=" ++ show (twIncludeRts tRequest)
   res <- requestTwitterApi req
   return $ eitherDecode $ responseBody res
 
@@ -65,9 +65,9 @@ mediaTweet tw mediaIds = do
 unTweet :: Integer -> IO (Either String Tweet)
 unTweet twId = do
   req         <- parseRequest
-                $ "https://api.twitter.com/1.1/statuses/destroy/"
-                ++ (show twId)
-                ++ ".json"
+              $ "https://api.twitter.com/1.1/statuses/destroy/"
+              ++ (show twId)
+              ++ ".json"
   let postReq  = urlEncodedBody [("trim_user", "false")] req
   res         <- requestTwitterApi postReq
   return $ eitherDecode $ responseBody res
@@ -75,9 +75,9 @@ unTweet twId = do
 retweet :: Integer -> IO (Either String Tweet)
 retweet twId = do
   req         <- parseRequest
-                $ "https://api.twitter.com/1.1/statuses/retweet/"
-                ++ (show twId)
-                ++ ".json"
+              $ "https://api.twitter.com/1.1/statuses/retweet/"
+              ++ (show twId)
+              ++ ".json"
   let postReq  = urlEncodedBody [("trim_user", "false")] req
   res         <- requestTwitterApi postReq
   return $ eitherDecode $ responseBody res
@@ -85,9 +85,9 @@ retweet twId = do
 unRetweet :: Integer -> IO (Either String Tweet)
 unRetweet twId = do
   req         <- parseRequest
-                $ "https://api.twitter.com/1.1/statuses/unretweet/"
-                ++ (show twId)
-                ++ ".json"
+              $ "https://api.twitter.com/1.1/statuses/unretweet/"
+              ++ (show twId)
+              ++ ".json"
   let postReq  = urlEncodedBody [("trim_user", "false")] req
   res         <- requestTwitterApi postReq
   return $ eitherDecode $ responseBody res

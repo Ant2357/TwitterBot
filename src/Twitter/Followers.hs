@@ -16,16 +16,16 @@ import Twitter.Data.UsersInfo
 followerIds :: String -> IO (Either String IdsInfo)
 followerIds screenName = do
   req <- parseRequest
-          $ "https://api.twitter.com/1.1/followers/ids.json"
-          ++ "?screen_name=" ++ screenName
+      $ "https://api.twitter.com/1.1/followers/ids.json"
+      ++ "?screen_name=" ++ screenName
   res <- requestTwitterApi req
   return $ eitherDecode $ responseBody res
 
 followerList :: UserRequest -> IO (Either String UsersInfo)
 followerList uRequest = do
   req <- parseRequest
-          $ "https://api.twitter.com/1.1/followers/list.json"
-          ++ "?screen_name=" ++ screenName uRequest
-          ++ "&count=" ++ show (count uRequest)
+      $ "https://api.twitter.com/1.1/followers/list.json"
+      ++ "?screen_name=" ++ screenName uRequest
+      ++ "&count=" ++ show (count uRequest)
   res <- requestTwitterApi req
   return $ eitherDecode $ responseBody res

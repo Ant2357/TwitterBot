@@ -42,11 +42,11 @@ makeSearchRequest searchQ resultType searchCount
 search :: SearchRequest -> IO (Either String SearchResult)
 search sRequest = do
   req <- parseRequest
-          $ "https://api.twitter.com/1.1/search/tweets.json"
-          ++ "?q=" ++ ((show . encodeText . searchQ) sRequest)
-          ++ "&lang=ja"
-          ++ "&locale=ja"
-          ++ "&result_type=" ++ (resultType sRequest)
-          ++ "&count=" ++ ((show . searchCount) sRequest)
+      $ "https://api.twitter.com/1.1/search/tweets.json"
+      ++ "?q=" ++ ((show . encodeText . searchQ) sRequest)
+      ++ "&lang=ja"
+      ++ "&locale=ja"
+      ++ "&result_type=" ++ (resultType sRequest)
+      ++ "&count=" ++ ((show . searchCount) sRequest)
   res <- requestTwitterApi req
   return $ eitherDecode $ responseBody res

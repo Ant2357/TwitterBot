@@ -50,8 +50,8 @@ instance (Num a, Show a) => Lookup [a] where
   lookup userIds = do
     let userIdsStr = (init . tail . show) userIds
     req <- parseRequest
-            $ "https://api.twitter.com/1.1/friendships/lookup.json"
-            ++ "?user_id=" ++ userIdsStr 
+        $ "https://api.twitter.com/1.1/friendships/lookup.json"
+        ++ "?user_id=" ++ userIdsStr 
     res <- requestTwitterApi req
     return $ eitherDecode $ responseBody res
 
@@ -59,7 +59,7 @@ instance Lookup [String] where
   lookup screenNames = do
     let screenNamesStr = DataList.intercalate "," screenNames
     req <- parseRequest
-            $ "https://api.twitter.com/1.1/friendships/lookup.json"
-            ++ "?screen_name=" ++ screenNamesStr
+        $ "https://api.twitter.com/1.1/friendships/lookup.json"
+        ++ "?screen_name=" ++ screenNamesStr
     res <- requestTwitterApi req
     return $ eitherDecode $ responseBody res
