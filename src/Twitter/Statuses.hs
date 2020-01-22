@@ -1,8 +1,9 @@
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE DeriveGeneric #-}
 
-module Twitter.Statuses ( TLRequest
-                        , makeTLRequest
+module Twitter.Statuses ( TLRequest (twScreenName, twExcludeReplies, twIncludeRts)
+                        , defTLRequest
+                        , newTLRequest
                         , userTimeline
                         , tweet
                         , mediaTweet
@@ -27,15 +28,18 @@ data TLRequest = TLRequest {
   twIncludeRts     :: Bool
 } deriving (Show, Generic)
 
-makeTLRequest :: String -> Int -> Bool -> Bool -> TLRequest
-makeTLRequest twScreenName twCount twExcludeReplies twIncludeRts
+defTLRequest :: TLRequest
+defTLRequest = TLRequest
+  { twScreenName     = ""
+  , twCount          = 20 
+  , twExcludeReplies = False
+  , twIncludeRts     = True
+  }
+
+newTLRequest :: TLRequest -> Int -> TLRequest
+newTLRequest tRequest twCount
   | twCount < 1 || 200 < twCount = error "count range: 1 <= count <= 200"
-  | otherwise                    = TLRequest
-    { twScreenName     = twScreenName
-    , twCount          = twCount
-    , twExcludeReplies = twExcludeReplies
-    , twIncludeRts     = twIncludeRts
-    }
+  | otherwise                    = tRequest { twCount = twCount }
 
 userTimeline :: TLRequest -> IO (Either String [Tweet])
 userTimeline tRequest = do

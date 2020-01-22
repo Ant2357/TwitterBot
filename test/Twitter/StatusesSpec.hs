@@ -28,31 +28,31 @@ timelineTweetCountEq timeline tweetCount = do
 
 spec :: Spec
 spec = do
-  describe "makeTLRequestのテスト" $ do
+  describe "newTLRequestのテスト" $ do
     it "countが不正(1未満)" $ do
-      evaluate (makeTLRequest "alice" 0 False True) `shouldThrow` errorCall "count range: 1 <= count <= 200"
+      evaluate (newTLRequest defTLRequest 0) `shouldThrow` errorCall "count range: 1 <= count <= 200"
     it "countが不正(200超え)" $ do
-      evaluate (makeTLRequest "alice" 201 False True) `shouldThrow` errorCall "count range: 1 <= count <= 200"
+      evaluate (newTLRequest defTLRequest 201) `shouldThrow` errorCall "count range: 1 <= count <= 200"
 
   describe "userTimelineのテスト" $ do
     let screenName = "github"
     it "リプライRTの除外無し" $ do
-      timeline <- userTimeline $ makeTLRequest screenName 100 False True
+      timeline <- userTimeline $ newTLRequest defTLRequest { twScreenName = screenName } 100
       timeline `timelineTweetCountEq` 100
     it "リプライRTを除外" $ do
-      timeline <- userTimeline $ makeTLRequest screenName 100 True False
+      timeline <- userTimeline $ newTLRequest defTLRequest { twScreenName = screenName, twExcludeReplies = True } 100
       case timeline of
         Left  _  -> "bad"       `shouldBe`      "case"
         Right tl -> (length tl) `shouldSatisfy` (<= 100)
 
     it "ユーザーにブロックされている" $ do
-      timeline <- userTimeline $ makeTLRequest "OffGao" 20 False True
+      timeline <- userTimeline $ newTLRequest defTLRequest { twScreenName = "OffGao" } 20
       errorCaseTest timeline
     it "ユーザーが凍結している" $ do
-      timeline <- userTimeline $ makeTLRequest "paiza_run" 20 False True
+      timeline <- userTimeline $ newTLRequest defTLRequest { twScreenName = "paiza_run" } 20
       errorCaseTest timeline
     it "存在しないユーザー" $ do
-      timeline <- userTimeline $ makeTLRequest "ant2357_run" 20 False True
+      timeline <- userTimeline $ newTLRequest defTLRequest { twScreenName = "ant2357_run" } 20
       errorCaseTest timeline
 
   describe "tweetのテスト" $ do
@@ -85,7 +85,7 @@ spec = do
 
   describe "unTweetのテスト" $ do
     it "ツイート削除" $ do
-      timeline <- userTimeline $ makeTLRequest loginName 2 False True
+      timeline <- userTimeline $ newTLRequest defTLRequest { twScreenName = loginName } 2
       case timeline of
         Left  _  -> "timelineBad" `shouldBe` "case"
         Right tl -> mapM_ (\tw -> do

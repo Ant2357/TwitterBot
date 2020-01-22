@@ -9,9 +9,9 @@ import qualified Data.Text.IO as T
 main = do
   tweet "しろたん"
 
-  -- makeTLRequest ユーザー名 検索件数 リプライを除外するか? リツイートを含めるか?
-  -- makeTLRequest :: String -> Int -> Bool -> Bool -> TLRequest
-  timeline <- userTimeline $ makeTLRequest "ant2357" 20 True True
+  -- 200件分のツイートを取得
+  timeline <- userTimeline $ newTLRequest
+    defTLRequest { twScreenName = "ant2357" } 200
 
   case timeline of
     Left err -> error err
