@@ -6,7 +6,6 @@ import Test.Hspec
 import Twitter.Friends
 import Twitter.Data.IdsInfo
 import Twitter.Data.UsersInfo
-import Twitter.Data.UserRequest
 
 spec :: Spec
 spec = do
@@ -27,13 +26,13 @@ spec = do
         Right _ -> "bad"      `shouldBe` "case"
 
     it "フォロー一覧の取得([ユーザーオブジェクト])" $ do
-      res <- followList $ makeUserRequest screenName 200
+      res <- followList $ makeRequestFollowList screenName 200
       case res of
         Left  _  -> "bad"                 `shouldBe` "case"
         Right xs -> ((length . users) xs) `shouldBe` 200 
 
     it "実在しないユーザーのフォロー一覧の取得([ユーザーオブジェクト])" $ do
-      res <- followList $ makeUserRequest badScreenName 200
+      res <- followList $ makeRequestFollowList badScreenName 200
       case res of
         Left  _ -> "goodcase" `shouldBe` "goodcase"
         Right _ -> "bad"      `shouldBe` "case"

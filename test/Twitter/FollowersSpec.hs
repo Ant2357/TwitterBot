@@ -6,7 +6,6 @@ import Test.Hspec
 import Control.Exception (evaluate)
 import Twitter.Followers
 import Twitter.Data.IdsInfo
-import Twitter.Data.UserRequest
 import Twitter.Data.UsersInfo
 
 spec :: Spec
@@ -28,13 +27,13 @@ spec = do
         Right _ -> "bad"      `shouldBe` "case"
 
     it "フォロワー一覧の取得([ユーザーオブジェクト])" $ do
-      res <- followerList $ makeUserRequest screenName 200
+      res <- followerList $ makeRequestFollowerList screenName 200
       case res of
         Left  _      -> "bad"                     `shouldBe` "case"
         Right fUsers -> ((length . users) fUsers) `shouldBe` 200
 
     it "実在しないユーザーのフォロワー一覧の取得([ユーザーオブジェクト])" $ do
-      res <- followerList $ makeUserRequest badScreenName 200
+      res <- followerList $ makeRequestFollowerList badScreenName 200
       case res of
         Left  _ -> "goodcase" `shouldBe` "goodcase"
         Right _ -> "bad"      `shouldBe` "case"

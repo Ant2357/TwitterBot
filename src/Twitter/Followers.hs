@@ -2,14 +2,17 @@
 {-# LANGUAGE DeriveGeneric #-}
 {-# LANGUAGE DuplicateRecordFields #-}
 
-module Twitter.Followers (followerIds, followerList) where
+module Twitter.Followers (  RequestFollowerList
+                          , makeRequestFollowerList
+                          , followerList
+                          , followerIds
+                          ) where
 
 import Data.Aeson
 import GHC.Generics
 import Network.HTTP.Conduit
 import Twitter.TwSettings
 import Twitter.Data.IdsInfo
-import Twitter.Data.UserRequest
 import Twitter.Data.UsersInfo
 
 followerIds :: String -> IO (Either String IdsInfo)
@@ -20,7 +23,17 @@ followerIds screenName = do
   res <- requestTwitterApi req
   return $ eitherDecode $ responseBody res
 
-followerList :: UserRequest -> IO (Either String UsersInfo)
+data RequestFollowerList = RequestFollowerList {
+  screenName :: String,
+  count      :: Int
+} deriving (Show, Generic)
+
+makeRequestFollowerList :: String -> Int -> RequestFollowerList
+makeRequestFollowerList screenName count
+  | count < 1 || 200 < count = error "count range: 1 <= count <= 200"
+  | otherwise                = RequestFollowerList { screenName = screenName, count = count }
+
+followerList :: RequestFollowerList -> IO (Either String UsersInfo)
 followerList uRequest = do
   req <- parseRequest
       $ "https://api.twitter.com/1.1/followers/list.json"
