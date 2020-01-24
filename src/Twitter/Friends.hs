@@ -32,10 +32,10 @@ makeRequestFollowList screenName count
   | otherwise                = RequestFollowList { screenName = screenName, count = count }
 
 followList :: RequestFollowList -> IO (Either String UsersInfo)
-followList uRequest = do
+followList fRequest = do
   req <- parseRequest
       $ "https://api.twitter.com/1.1/friends/list.json"
-      ++ "?screen_name=" ++ screenName uRequest
-      ++ "&count=" ++ show (count uRequest)
+      ++ "?screen_name=" ++ screenName fRequest
+      ++ "&count=" ++ show (count fRequest)
   res <- requestTwitterApi req
   return $ eitherDecode $ responseBody res
