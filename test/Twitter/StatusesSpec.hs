@@ -103,9 +103,9 @@ spec = do
         Right _ -> "bad"      `shouldBe` "case"
 
   describe "RT関連のテスト" $ do
-    let twId     = 990243814227918851                          -- テストするツイートのID
-    let twText   = "ちんちん"                                   -- ツイート本文
-    let twRtText = T.pack $ "RT @" ++ loginName ++ ": ちんちん" -- RTのツイート本文
+    let twId     = 990243814227918851     -- テストするツイートのID
+    let twText   = "ちんちん"              -- ツイート本文
+    let twRtText = "RT @ant2357: ちんちん" -- RTのツイート本文
 
     it "リツイート" $ do
       res <- retweet twId
