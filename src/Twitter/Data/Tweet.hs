@@ -6,10 +6,19 @@ module Twitter.Data.Tweet (Tweet (..)) where
 import Data.Text
 import Data.Aeson
 import GHC.Generics
+import Twitter.Data.User
 
 data Tweet = Tweet {
-  id     :: Integer,
-  text   :: Text
+  created_at      :: String,
+  favorited       :: Bool,
+  favorite_count  :: Int,
+  id              :: Integer,
+  id_str          :: String,
+  is_quote_status :: Bool,
+  retweeted       :: Bool,
+  retweet_count   :: Int,
+  text            :: Text,
+  user            :: User
 } deriving (Show, Generic)
 
 instance FromJSON Tweet
