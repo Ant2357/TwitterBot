@@ -1,23 +1,19 @@
 {-# LANGUAGE OverloadedStrings #-}
-{-# LANGUAGE DuplicateRecordFields #-}
 
 module Main where
 
-import Data.List
-import Twitter.Search
+import Twitter.Statuses
 import Twitter.Data.Tweet
-import Twitter.Data.User
+import qualified Data.Text.IO as T
 
 main :: IO ()
 main = do
-    let searchQ     = "#swallows"
-    let searchCount = 100
+  _ <- tweet "しろたん"
 
-    res <- search $ makeSearchRequest searchQ "mixed" searchCount
-    case res of
-      Left  err -> error err
-      Right tl  -> do
-        let users         = nub $ map user (statuses tl)
-        let toFollowNames = filter (not . following) users
-        let urls          = map (\u -> "https://twitter.com/" ++ screen_name u) toFollowNames
-        writeFile "app/files/followUrls.txt" $ unlines urls
+  -- 200件分のツイートを取得
+  timeline <- userTimeline $ newTLRequest
+    defTLRequest { twScreenName = "ant2357" } 200
+
+  case timeline of
+    Left err -> error err
+    Right tl -> mapM_ (T.putStrLn . text) tl

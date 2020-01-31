@@ -35,8 +35,7 @@ library:
 
 executables:
   TwitterBot-exe:
-    main:                Main.hs
-    source-dirs:         app
+    main:                app/Main.hs
     ghc-options:
     - -threaded
     - -rtsopts
@@ -44,6 +43,15 @@ executables:
     dependencies:
     - TwitterBot
     - text
+
+  CreateFileFollowUrls:
+    main:                app/createFileFollowUrls.hs
+    ghc-options:
+    - -threaded
+    - -rtsopts
+    - -with-rtsopts=-N
+    dependencies:
+    - TwitterBot
 
 tests:
   TwitterBot-test:
