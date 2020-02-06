@@ -56,7 +56,7 @@ spec = do
       errorCaseTest timeline
 
   describe "tweetのテスト" $ do
-    let twMsg = "にゃーん"
+    let twMsg = "Haskellから自動ツイート"
     it "ツイート" $ do
       res <- tweet twMsg
       case res of
