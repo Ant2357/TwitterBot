@@ -15,7 +15,7 @@ data User = User {
   followers_count :: Integer,
   following       :: Bool,
   statuses_count  :: Integer
-} deriving (Show, Eq, Generic)
+} deriving (Show, Eq, Ord, Generic)
 
 instance FromJSON User
 instance ToJSON   User

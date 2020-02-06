@@ -19,7 +19,7 @@ data Tweet = Tweet {
   retweet_count   :: Int,
   text            :: Text,
   user            :: User
-} deriving (Show, Eq, Generic)
+} deriving (Show, Eq, Ord, Generic)
 
 instance FromJSON Tweet
 instance ToJSON   Tweet

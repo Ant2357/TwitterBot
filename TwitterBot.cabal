@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 6e423cdbdd16d343bf8db75db6fb76b697e96adc3e972b8a0e5f2513c548e455
+-- hash: 1333a88ab8e7a88b85a68405a6a2b3d76929f46091f45ba0596cbb62b550e15d
 
 name:           TwitterBot
 version:        0.1.0.0
@@ -62,6 +62,7 @@ executable CreateFileFollowUrls
   build-depends:
       TwitterBot
     , base >=4.7 && <5
+    , containers
   default-language: Haskell2010
 
 executable TwitterBot-exe
