@@ -4,7 +4,6 @@ module Twitter.StatusesSpec (spec) where
 
 import Test.Hspec
 import Control.Exception (evaluate)
-import Twitter.TwSettings (loginName)
 import Twitter.Statuses
 import Twitter.Media
 import Twitter.Data.Tweet
@@ -33,6 +32,11 @@ spec = do
       evaluate (newTLRequest defTLRequest 0) `shouldThrow` errorCall "count range: 1 <= count <= 200"
     it "countが不正(200超え)" $ do
       evaluate (newTLRequest defTLRequest 201) `shouldThrow` errorCall "count range: 1 <= count <= 200"
+
+  describe "homeTimelineのテスト" $ do
+    it "TL取得" $ do
+      timeline <- homeTimeline $ newTLRequest defTLRequest 10
+      timeline `timelineTweetCountEq` 10
 
   describe "userTimelineのテスト" $ do
     let screenName = "github"
@@ -85,7 +89,7 @@ spec = do
 
   describe "unTweetのテスト" $ do
     it "ツイート削除" $ do
-      timeline <- userTimeline $ newTLRequest defTLRequest { twScreenName = loginName } 2
+      timeline <- homeTimeline $ newTLRequest defTLRequest 2
       case timeline of
         Left  _  -> "timelineBad" `shouldBe` "case"
         Right tl -> mapM_ (\tw -> do

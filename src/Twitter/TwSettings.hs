@@ -1,12 +1,11 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-module Twitter.TwSettings (requestTwitterApi, loginName) where
+module Twitter.TwSettings (requestTwitterApi) where
 
 import qualified Data.ByteString.Lazy.Internal as S
 import Web.Authenticate.OAuth
 import Network.HTTP.Conduit
 
-loginName         = "ant2357"
 consumerKey       = "XXXXXXX"
 consumerSecret    = "XXXXXXX"
 accessToken       = "XXXXXXX"

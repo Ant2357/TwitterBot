@@ -4,6 +4,7 @@
 module Twitter.Statuses ( TLRequest (twScreenName, twExcludeReplies, twIncludeRts)
                         , defTLRequest
                         , newTLRequest
+                        , homeTimeline
                         , userTimeline
                         , tweet
                         , mediaTweet
@@ -40,6 +41,16 @@ newTLRequest :: TLRequest -> Int -> TLRequest
 newTLRequest tRequest twCount
   | twCount < 1 || 200 < twCount = error "count range: 1 <= count <= 200"
   | otherwise                    = tRequest { twCount = twCount }
+
+homeTimeline :: TLRequest -> IO (Either String [Tweet])
+homeTimeline tRequest = do
+  req <- parseRequest
+      $ "https://api.twitter.com/1.1/statuses/home_timeline.json"
+      ++ "?count=" ++ show (twCount tRequest)
+      ++ "&exclude_replies=" ++ show (twExcludeReplies tRequest)
+      ++ "&include_rts=" ++ show (twIncludeRts tRequest)
+  res <- requestTwitterApi req
+  return $ eitherDecode $ responseBody res
 
 userTimeline :: TLRequest -> IO (Either String [Tweet])
 userTimeline tRequest = do
