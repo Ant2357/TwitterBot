@@ -44,8 +44,8 @@ executables:
     - TwitterBot
     - text
 
-  CreateFileFollowUrls:
-    main:                app/createFileFollowUrls.hs
+  AutoFollow-exe:
+    main:                app/AutoFollow.hs
     ghc-options:
     - -threaded
     - -rtsopts
