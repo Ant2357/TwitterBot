@@ -21,7 +21,7 @@ followTimeline tweets = do
     case res of
       Left  err -> putStrLn $ "BAD:" ++ err
       Right u   -> putStrLn $ "SUCCESS:" ++ (screen_name u)
-    threadDelay (5 * 60 * 1000 * 1000)
+    threadDelay (3 * 60 * 1000 * 1000)
 
 main :: IO ()
 main = do
