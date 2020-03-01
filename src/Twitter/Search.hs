@@ -15,7 +15,7 @@ import Network.HTTP.Conduit
 import Twitter.TwSettings
 import Twitter.Data.Tweet
 
-data SearchResult = SearchResult {
+newtype SearchResult = SearchResult {
   statuses :: [Tweet]
 } deriving (Show, Generic)
 instance FromJSON SearchResult
@@ -43,10 +43,11 @@ search :: SearchRequest -> IO (Either String SearchResult)
 search sRequest = do
   req <- parseRequest
       $ "https://api.twitter.com/1.1/search/tweets.json"
-      ++ "?q=" ++ ((show . encodeText . searchQ) sRequest)
+      ++ "?q=" ++ (show . encodeText . searchQ) sRequest
       ++ "&lang=ja"
       ++ "&locale=ja"
-      ++ "&result_type=" ++ (resultType sRequest)
-      ++ "&count=" ++ ((show . searchCount) sRequest)
+      ++ "&result_type=" ++ resultType sRequest
+      ++ "&count=" ++ (show . searchCount) sRequest
+
   res <- requestTwitterApi req
   return $ eitherDecode $ responseBody res

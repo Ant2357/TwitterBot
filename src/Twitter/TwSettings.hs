@@ -24,4 +24,4 @@ twCredential = newCredential accessToken accessTokenSecret
 requestTwitterApi :: Request -> IO (Response S.ByteString)
 requestTwitterApi req = do
   signedReq <- signOAuth twOAuth twCredential req
-  return   =<< httpLbs signedReq =<< (newManager tlsManagerSettings)
+  httpLbs signedReq =<< newManager tlsManagerSettings

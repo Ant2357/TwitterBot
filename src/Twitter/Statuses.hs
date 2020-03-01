@@ -81,7 +81,7 @@ unTweet :: Integer -> IO (Either String Tweet)
 unTweet twId = do
   req         <- parseRequest
               $ "https://api.twitter.com/1.1/statuses/destroy/"
-              ++ (show twId)
+              ++ show twId
               ++ ".json"
   let postReq  = urlEncodedBody [("trim_user", "false")] req
   res         <- requestTwitterApi postReq
@@ -91,7 +91,7 @@ retweet :: Integer -> IO (Either String Tweet)
 retweet twId = do
   req         <- parseRequest
               $ "https://api.twitter.com/1.1/statuses/retweet/"
-              ++ (show twId)
+              ++ show twId
               ++ ".json"
   let postReq  = urlEncodedBody [("trim_user", "false")] req
   res         <- requestTwitterApi postReq
@@ -101,7 +101,7 @@ unRetweet :: Integer -> IO (Either String Tweet)
 unRetweet twId = do
   req         <- parseRequest
               $ "https://api.twitter.com/1.1/statuses/unretweet/"
-              ++ (show twId)
+              ++ show twId
               ++ ".json"
   let postReq  = urlEncodedBody [("trim_user", "false")] req
   res         <- requestTwitterApi postReq
