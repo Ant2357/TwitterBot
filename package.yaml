@@ -53,6 +53,7 @@ executables:
     dependencies:
     - TwitterBot
     - containers
+    - text
 
 tests:
   TwitterBot-test:

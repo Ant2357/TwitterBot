@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 06ae013c888d77b56c7d66448c1330a60f55ae8d0a55e2cd9940be55747715b0
+-- hash: a20ebb1ecd3aaee60b4d17edfd6831bc63805c47be9e462a2a188e3a9ecd9c88
 
 name:           TwitterBot
 version:        0.1.0.0
@@ -63,6 +63,7 @@ executable AutoFollow-exe
       TwitterBot
     , base >=4.7 && <5
     , containers
+    , text
   default-language: Haskell2010
 
 executable TwitterBot-exe
