@@ -32,7 +32,7 @@ main = do
 
   args <- getArgs
   when (length args /= 2) $ error "[ERROR] length args /= 2"
-  when ((not . isDigitOnly) (args !! 1)) $error "[ERROR] args2: Not Int"
+  when ((not . isDigitOnly) (args !! 1)) $ error "[ERROR] args2: Not Int"
 
   let searchQ     = T.pack $ args !! 0
   let searchCount = read (args !! 1) :: Int
