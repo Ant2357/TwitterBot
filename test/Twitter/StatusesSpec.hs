@@ -44,7 +44,11 @@ spec = do
       timeline <- userTimeline $ newTLRequest defTLRequest { twScreenName = screenName } 100
       timeline `timelineTweetCountEq` 100
     it "リプライRTを除外" $ do
-      timeline <- userTimeline $ newTLRequest defTLRequest { twScreenName = screenName, twExcludeReplies = True } 100
+      timeline <- userTimeline $ newTLRequest defTLRequest
+        { twScreenName     = screenName
+        , twExcludeReplies = True
+        , twIncludeRts     = False
+        } 100
       case timeline of
         Left  _  -> "bad"       `shouldBe`      "case"
         Right tl -> (length tl) `shouldSatisfy` (<= 100)
