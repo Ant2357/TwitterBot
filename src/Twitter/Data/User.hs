@@ -11,6 +11,7 @@ data User = User {
   id              :: Integer,
   name            :: Text,
   screen_name     :: String,
+  description     :: Text,
   friends_count   :: Integer,
   followers_count :: Integer,
   following       :: Bool,

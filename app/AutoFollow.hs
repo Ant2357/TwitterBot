@@ -18,13 +18,16 @@ followTimeline :: [Tweet] -> IO ()
 followTimeline tweets = do
   let users       = Set.toList . Set.fromList $ map user tweets
   let followUsers = filter (not . following) users
-  let followNames = map (screen_name) followUsers
-  forM_ followNames $ \followName -> do
-    res <- follow followName
-    case res of
-      Left  err -> putStrLn $ "[BAD] " ++ err
-      Right u   -> putStrLn $ "[SUCCESS] " ++ (screen_name u)
-    threadDelay (3 * 60 * 1000 * 1000)
+  forM_ followUsers $ \followUser -> do
+    let bio    = description followUser
+    let newBio = T.replace "巨人" "" bio
+
+    when ((T.length bio) == (T.length newBio)) $ do
+      res <- follow $ screen_name followUser
+      case res of
+        Left  err -> putStrLn $ "[BAD] " ++ err
+        Right u   -> putStrLn $ "[SUCCESS] " ++ (screen_name u)
+      threadDelay (3 * 60 * 1000 * 1000)
 
 main :: IO ()
 main = do
