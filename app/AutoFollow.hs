@@ -14,20 +14,25 @@ import Twitter.Friendships (follow)
 import Twitter.Data.Tweet
 import Twitter.Data.User
 
+antiGiantsFilter :: [User] -> [User]
+antiGiantsFilter users = filter (\user ->
+  let bio    = description user
+      newBio = T.replace "巨人" "" $ description user
+  in T.length bio == T.length newBio
+  ) users
+
 followTimeline :: [Tweet] -> IO ()
 followTimeline tweets = do
-  let users       = Set.toList . Set.fromList $ map user tweets
-  let followUsers = filter (not . following) users
-  forM_ followUsers $ \followUser -> do
-    let bio    = description followUser
-    let newBio = T.replace "巨人" "" bio
+  let users          = Set.toList . Set.fromList $ map user tweets
+  let notFollowUsers = filter (not . following) users
+  let followUsers    = antiGiantsFilter notFollowUsers
 
-    when ((T.length bio) == (T.length newBio)) $ do
-      res <- follow $ screen_name followUser
-      case res of
-        Left  err -> putStrLn $ "[BAD] " ++ err
-        Right u   -> putStrLn $ "[SUCCESS] " ++ (screen_name u)
-      threadDelay (3 * 60 * 1000 * 1000)
+  forM_ followUsers $ \followUser -> do
+    res <- follow $ screen_name followUser
+    case res of
+      Left  err -> putStrLn $ "[BAD] " ++ err
+      Right u   -> putStrLn $ "[SUCCESS] " ++ (screen_name u)
+    threadDelay (3 * 60 * 1000 * 1000)
 
 main :: IO ()
 main = do
