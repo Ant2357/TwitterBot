@@ -1,11 +1,11 @@
 {-# LANGUAGE DeriveGeneric #-}
 
-module Twitter.Data.IdsInfo (IdsInfo (..)) where
+module Twitter.Data.Ids (Ids (..)) where
 
 import Data.Aeson
 import GHC.Generics
 
-data IdsInfo = IdsInfo {
+data Ids = Ids {
   ids                 :: [Integer],
   next_cursor         :: Integer,
   next_cursor_str     :: String,
@@ -13,5 +13,5 @@ data IdsInfo = IdsInfo {
   previous_cursor_str :: String
 } deriving (Show, Generic)
 
-instance FromJSON IdsInfo
-instance ToJSON   IdsInfo
+instance FromJSON Ids
+instance ToJSON   Ids

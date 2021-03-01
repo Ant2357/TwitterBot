@@ -12,10 +12,10 @@ import Data.Aeson
 import GHC.Generics
 import Network.HTTP.Conduit
 import Twitter.TwSettings
-import Twitter.Data.IdsInfo
+import Twitter.Data.Ids
 import Twitter.Data.UsersInfo
 
-followerIds :: String -> IO (Either String IdsInfo)
+followerIds :: String -> IO (Either String Ids)
 followerIds screenName = do
   req <- parseRequest
       $ "https://api.twitter.com/1.1/followers/ids.json"

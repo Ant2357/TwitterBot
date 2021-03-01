@@ -15,7 +15,7 @@ badCaseTest res = do
 spec :: Spec
 spec = do
   describe "いいねのテスト" $ do
-    let twId = 1175793383412862976
+    let twId = 1326924708126752768
     it "いいねする" $ do
       res <- fav twId
       case res of
