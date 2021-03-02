@@ -5,7 +5,7 @@ module Twitter.FriendsSpec (spec) where
 import Test.Hspec
 import Twitter.Friends
 import Twitter.Data.Ids
-import Twitter.Data.UsersInfo
+import Twitter.Data.Users
 
 spec :: Spec
 spec = do

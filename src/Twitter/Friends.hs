@@ -11,7 +11,7 @@ import GHC.Generics
 import Network.HTTP.Conduit
 import Twitter.TwSettings
 import Twitter.Data.Ids
-import Twitter.Data.UsersInfo
+import Twitter.Data.Users
 
 followIds :: String -> IO (Either String Ids)
 followIds screenName = do
@@ -31,7 +31,7 @@ makeRequestFollowList screenName count
   | count < 1 || 200 < count = error "count range: 1 <= count <= 200"
   | otherwise                = RequestFollowList { screenName = screenName, count = count }
 
-followList :: RequestFollowList -> IO (Either String UsersInfo)
+followList :: RequestFollowList -> IO (Either String Users)
 followList fRequest = do
   req <- parseRequest
       $ "https://api.twitter.com/1.1/friends/list.json"

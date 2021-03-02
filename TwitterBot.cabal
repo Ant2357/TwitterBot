@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: ee84417be53cbc5f926af99f0a9369c321ff7e5faaa2beb3b6173bde73481403
+-- hash: 58ae62c7801287b72c5e9683a5a3bce781f430e9759d5fbadf4c0e3cf0f139ed
 
 name:           TwitterBot
 version:        0.1.0.0
@@ -30,7 +30,7 @@ library
       Twitter.Data.Ids
       Twitter.Data.Tweet
       Twitter.Data.User
-      Twitter.Data.UsersInfo
+      Twitter.Data.Users
       Twitter.Favorites
       Twitter.Followers
       Twitter.Friends

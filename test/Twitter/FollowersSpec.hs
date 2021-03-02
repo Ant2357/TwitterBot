@@ -6,7 +6,7 @@ import Test.Hspec
 import Control.Exception (evaluate)
 import Twitter.Followers
 import Twitter.Data.Ids
-import Twitter.Data.UsersInfo
+import Twitter.Data.Users
 
 spec :: Spec
 spec = do
