@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 58ae62c7801287b72c5e9683a5a3bce781f430e9759d5fbadf4c0e3cf0f139ed
+-- hash: 25274cd31725bad28c5a201a76e96ed3b09e85a81de4c616c5d848da1e7a47c3
 
 name:           TwitterBot
 version:        0.1.0.0
@@ -27,10 +27,12 @@ source-repository head
 
 library
   exposed-modules:
+      Twitter.Data.Dm
       Twitter.Data.Ids
       Twitter.Data.Tweet
       Twitter.Data.User
       Twitter.Data.Users
+      Twitter.DirectMessages
       Twitter.Favorites
       Twitter.Followers
       Twitter.Friends
@@ -81,6 +83,7 @@ test-suite TwitterBot-test
   type: exitcode-stdio-1.0
   main-is: Spec.hs
   other-modules:
+      Twitter.DirectMessagesSpec
       Twitter.FavoritesSpec
       Twitter.FollowersSpec
       Twitter.FriendshipsSpec
