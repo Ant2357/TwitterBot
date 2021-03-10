@@ -9,8 +9,8 @@ import Twitter.Data.Dm
 spec :: Spec
 spec = do
   describe "dmのテスト" $ do
-    let recipientId = "4432778053" 
-    let msg = "あいうえお"
+    let recipientId = "4432778053"
+    let msg         = "HaskellからテストDM"
     it "DM送信" $ do
       res <- dm recipientId msg
       case res of
