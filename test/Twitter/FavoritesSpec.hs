@@ -36,6 +36,10 @@ spec = do
       res <- unFav twId
       badCaseTest res
 
-    it "実在しないTweetID" $ do
+    it "実在しないTweetIDにいいね" $ do
       res <- fav (-1)
+      badCaseTest res
+
+    it "実在しないTweetIDにいいね解除" $ do
+      res <- unFav (-1)
       badCaseTest res

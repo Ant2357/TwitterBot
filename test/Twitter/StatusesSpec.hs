@@ -53,7 +53,7 @@ spec = do
         Left  _  -> "bad"       `shouldBe`      "case"
         Right tl -> (length tl) `shouldSatisfy` (<= 100)
 
-    it "ユーザーにブロックされている" $ do
+    it "ユーザーが鍵垢(非公開)" $ do
       timeline <- userTimeline $ newTLRequest defTLRequest { twScreenName = "OffGao" } 20
       errorCaseTest timeline
     it "ユーザーが凍結している" $ do
@@ -135,7 +135,6 @@ spec = do
       {-
         RTしていないツイートをstatuses/unretweet/:idでRT解除しようとしても、
         エラーを吐かないTwitterほんまにゃーん
-        何でツイート情報を返してくるの…
       -}
       res <- unRetweet twId
       case res of
