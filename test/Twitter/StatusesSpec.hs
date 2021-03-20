@@ -78,13 +78,14 @@ spec = do
         Right _ -> "bad"      `shouldBe` "case"
 
   describe "replyのテスト" $ do
-    let twId  = 1373291233943064584
-    let twMsg = "Haskellから自動リプライ"
+    let twId    = 1370398484130504704
+    let twMsg   = "Haskellから自動リプライ"
+    let resText = "@ant2357 Haskellから自動リプライ"
     it "返信ツイート" $ do
       res <- reply twId twMsg
       case res of
         Left  _  -> "bad"     `shouldBe` "case"
-        Right tw -> (text tw) `shouldBe` twMsg
+        Right tw -> (text tw) `shouldBe` resText
 
   describe "mediaTweetのテスト" $ do
     it "画像ツイート" $ do

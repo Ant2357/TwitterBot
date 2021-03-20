@@ -74,7 +74,10 @@ tweet tw = do
 reply :: Integer -> Text -> IO (Either String Tweet)
 reply twId tw = do
   req         <- parseRequest "https://api.twitter.com/1.1/statuses/update.json"
-  let postReq  = urlEncodedBody [("status", encodeUtf8 tw), ("in_reply_to_status_id", (B8.pack . show) twId)] req
+  let postReq  = urlEncodedBody [ ("status", encodeUtf8 tw)
+                                , ("in_reply_to_status_id", (B8.pack . show) twId)
+                                , ("auto_populate_reply_metadata", "True")
+                                ] req
   res         <- requestTwitterApi postReq
   return $ eitherDecode $ responseBody res
 
