@@ -77,6 +77,15 @@ spec = do
         Left  _ -> "goodcase" `shouldBe` "goodcase"
         Right _ -> "bad"      `shouldBe` "case"
 
+  describe "replyのテスト" $ do
+    let twId  = 1373291233943064584
+    let twMsg = "Haskellから自動リプライ"
+    it "返信ツイート" $ do
+      res <- reply twId twMsg
+      case res of
+        Left  _  -> "bad"     `shouldBe` "case"
+        Right tw -> (text tw) `shouldBe` twMsg
+
   describe "mediaTweetのテスト" $ do
     it "画像ツイート" $ do
       let twMsg = "Haskellから画像ツイート"
@@ -93,7 +102,7 @@ spec = do
 
   describe "unTweetのテスト" $ do
     it "ツイート削除" $ do
-      timeline <- homeTimeline $ newTLRequest defTLRequest 2
+      timeline <- homeTimeline $ newTLRequest defTLRequest 3
       case timeline of
         Left  _  -> "timelineBad" `shouldBe` "case"
         Right tl -> mapM_ (\tw -> do
