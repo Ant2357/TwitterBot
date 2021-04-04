@@ -25,6 +25,13 @@ timelineTweetCountEq timeline tweetCount = do
     Left  _  -> "bad"       `shouldBe` "case"
     Right tl -> (length tl) `shouldBe` tweetCount
 
+mediaTweetTest :: Media -> T.Text -> Expectation
+mediaTweetTest m twMsg = do
+  res <- mediaTweet twMsg (media_id m)
+  case res of
+    Left  _  -> "bad"                               `shouldBe` "case"
+    Right tw -> (T.take (T.length twMsg) (text tw)) `shouldBe` twMsg
+
 spec :: Spec
 spec = do
   describe "newTLRequestのテスト" $ do
@@ -95,11 +102,7 @@ spec = do
       mediaRes  <- mediaUpload mediaFile
       case mediaRes of
         Left  _ -> "mediaBad" `shouldBe` "case"
-        Right m -> do
-          res <- mediaTweet twMsg (media_id m)
-          case res of
-            Left  _  -> "bad"                               `shouldBe` "case"
-            Right tw -> (T.take (T.length twMsg) (text tw)) `shouldBe` twMsg
+        Right m -> mediaTweetTest m twMsg
 
   describe "unTweetのテスト" $ do
     it "ツイート削除" $ do
