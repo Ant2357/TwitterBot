@@ -32,6 +32,13 @@ mediaTweetTest m twMsg = do
     Left  _  -> "bad"                               `shouldBe` "case"
     Right tw -> (T.take (T.length twMsg) (text tw)) `shouldBe` twMsg
 
+deleteTweetTest :: Integer -> Expectation
+deleteTweetTest delTwId = do
+  res <- unTweet delTwId
+  case res of
+    Left  _  -> "bad"   `shouldBe` "case"
+    Right tw -> (id tw) `shouldBe` delTwId
+
 spec :: Spec
 spec = do
   describe "newTLRequestのテスト" $ do
@@ -109,13 +116,7 @@ spec = do
       timeline <- homeTimeline $ newTLRequest defTLRequest 3
       case timeline of
         Left  _  -> "timelineBad" `shouldBe` "case"
-        Right tl -> mapM_ (\tw -> do
-          let delTwId = id tw
-          res <- unTweet delTwId
-          case res of
-            Left  _  -> "bad"   `shouldBe` "case"
-            Right tw -> (id tw) `shouldBe` delTwId
-          ) tl
+        Right tl -> mapM_ (\tw -> deleteTweetTest (id tw)) tl
 
     it "存在しないツイートを削除" $ do
       res <- unTweet 0
